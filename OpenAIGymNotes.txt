@@ -1,0 +1,36 @@
+OpenAI Gym - Its a simulated environment where agents can interact with the environment: view state, take action,  receive reward for action. Its a consistent way for RL algorithms to interact with the environment
+
+
+Key Points About Each Function:
+
+init:
+
+Runs once when environment is created
+Must define the possible actions and observations
+Sets up any needed variables or state
+
+
+reset:
+
+Runs at start of each episode
+Must return initial state that matches observation_space
+Important for training multiple episodes
+Can handle random seeding for reproducibility
+
+
+step:
+
+Core function that runs environment simulation
+Must validate actions are legal
+Updates environment state based on action
+Calculates rewards
+Determines if episode is complete
+Most complex function typically
+
+
+render:
+
+Optional but useful for debugging/visualization
+Can support multiple modes
+Doesn't affect environment state
+Used mainly for human observation/debugging

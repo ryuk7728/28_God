@@ -1,0 +1,7 @@
+So the core functions in the gym environment are init, reset and step and the init function is responsible for setting up the variables for the environment like actions and observations. The reset function is used to populate the variables in init and return the initial game state. The action is used to modify the state of the game based on the action and it determines if the game is complete and it returns the state of the game, the reward, if the game is done and any other info that the agent might need
+
+
+Is episode = game?
+
+
+https://chatgpt.com/share/671e7fe3-8e68-8010-b3a7-a1b6380354f7
