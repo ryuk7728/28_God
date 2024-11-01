@@ -1,1 +1,1 @@
-Building a superhuman RL agent for 28 
+Building an RL agent that can play 28 at a superhuman level
