@@ -25,16 +25,33 @@ class GameEnv:
                 print(card.identity())
         
         print("\n")
+    
+    def callBid(self,min,max):
+
+        bid = int(input())
+        while (bid !=0 and bid < min) or bid > max:
+                print(f"Invalid Bid. Enter your bid, greater than {min} and max {max} or pass by entering 0")
+                bid = int(input())
+        return bid
+
+    def passCheck(self,bid,final,num):
+
+            if bid == 0:
+                passCond = True
+            else:
+                passCond = False
+                final = num
+            
+            return passCond,final
+
 
     def step(self,action):
 
         if self.bidding:
 
             print("The bidding starts now \n\n")
-
             print("Player 1 cards are: \n")
             self.printCards(self.player1Cards)
-
 
             print("Enter your bid, starting from 14. Max bid is 23")
             self.player1Bid = int(input())
@@ -44,23 +61,13 @@ class GameEnv:
             
             self.finalBid = 1
 
-
             print("Player 2 cards are:")
             self.printCards(self.player2Cards)
                 
             print(f"Enter your bid, greater than {self.player1Bid} and max 23 or pass by entering 0")
-            self.player2Bid = int(input())
-            while (self.player2Bid!=0 and self.player2Bid<=self.player1Bid) or self.player2Bid>23:
-                print(f"Invalid Bid. Enter your bid, greater than {self.player1Bid} and max 23 or pass by entering 0")
-                self.player2Bid = int(input())
+            self.player2Bid = self.callBid(self.player1Bid,23)
+            self.player2pass,self.finalBid = self.passCheck(self.player2Bid,self.finalBid,2)
             
-            if self.player2Bid == 0:
-                self.player2pass = True
-            else:
-                self.player2pass = False
-                self.finalBid = 2
-            
-
             print("Player 3 cards are:")
             self.printCards(self.player3Cards)
             bidMax = 0
@@ -71,18 +78,9 @@ class GameEnv:
                     bidMax = max(self.player1Bid,19)
 
             print(f"Enter your bid, greater than {bidMax} and max 23 or pass by entering 0")
-            self.player3Bid = int(input())
-            while (self.player3Bid!=0 and self.player3Bid<=bidMax) or self.player3Bid>23:
-                    print(f"Invalid Bid. Enter your bid, greater than {bidMax} and max 23 or pass by entering 0")
-                    self.player3Bid = int(input())
-            
-            if self.player3Bid == 0:
-                    self.player3pass = True
-            else:
-                    self.player3pass = False
-                    self.finalBid = 3
+            self.player3Bid = self.callBid(bidMax,23)
+            self.player3pass,self.finalBid = self.passCheck(self.player3Bid,self.finalBid,3)
 
-            self.player4pass = True
             self.player4Bid = 0
 
             bids = [self.player1Bid,self.player2Bid,self.player3Bid,self.player4Bid]
@@ -96,18 +94,10 @@ class GameEnv:
                 
 
             print(f"Enter your bid, greater than {greater} and max 23 or pass by entering 0")
-            self.player4Bid = int(input())
-            while (self.player4Bid!=0 and self.player4Bid<=greater) or self.player4Bid>23:
-                    print(f"Invalid Bid. Enter your bid, greater than {greater} and max 23 or pass by entering 0")
-                    self.player4Bid = int(input())
+            self.player4Bid = self.callBid(greater,23)
             
-            if self.player4Bid == 0:
-                    self.player4pass = True
-            else:
-                    self.player4pass = False
+            if not self.player4Bid == 0:
                     self.finalBid = 4
-
-
             
             bids = [self.player1Bid,self.player2Bid,self.player3Bid,self.player4Bid]
             self.finalBidValue = bids[self.finalBid-1]
@@ -160,9 +150,7 @@ class GameEnv:
             self.round1BidValue = self.finalBidValue
 
             print("Player 1 cards are:")
-            print()
-            for card in self.player1Cards:
-                    print(card.identity())
+            self.printCards(self.player1Cards)
             
             if self.round1Bid==1:
                          print((self.playerTrump).identity())
@@ -175,9 +163,7 @@ class GameEnv:
                 self.player1Bid = int(input())
 
             print("Player 2 cards are:")
-            print()
-            for card in self.player2Cards:
-                    print(card.identity())
+            self.printCards(self.player2Cards)
 
             if self.round1Bid==2:
                          print((self.playerTrump).identity())        
@@ -192,9 +178,7 @@ class GameEnv:
                 
 
             print("Player 3 cards are:")
-            print()
-            for card in self.player3Cards:
-                    print(card.identity())
+            self.printCards(self.player3Cards)
             
             if self.round1Bid==3:
                          print((self.playerTrump).identity())
@@ -208,9 +192,7 @@ class GameEnv:
                 self.player3Bid = int(input())
             
             print("Player 4 cards are:")
-            print()
-            for card in self.player4Cards:
-                    print(card.identity())
+            self.printCards(self.player4Cards)
 
             if self.round1Bid==4:
                          print((self.playerTrump).identity())        
