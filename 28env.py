@@ -1,6 +1,7 @@
 from cards import Cards
 import random
 import numpy as np
+import pickle 
 
 class GameEnv:
 
@@ -44,25 +45,72 @@ class GameEnv:
             
             return passCond,final
     
-    def selectTrump(self,cards,min,max):
+    def selectCard(self,cards,option=0,curInd=[]):
         
-        ind = 0
-        count = 0
-        for card in cards:
-            print(f"{count} :",card.identity())
-            count+=1
-        
-        ind = int(input())
-        while ind>max or ind<min:
-            print(f"Invalid Input. Enter your the number from {min}-{max}")
-            ind = int(input())
-        return ind
+        if option == 0:
+             
+            ind = 0
+            count = 0
+            for card in cards:
+                print(f"{count} :",card.identity())
+                count+=1
 
+            min = 0
+            max = count
+            ind = int(input())
+
+            while ind>max or ind<min:
+                print(f"Invalid Input. Enter your the number from {min}-{max}")
+                ind = int(input())
+            return ind
+
+        else:
+             count = 0
+             for card in cards:
+                  if count in curInd:
+                       print(f"{count} :",card.identity())
+                  count+=1
+            
+             ind = int(input())
+             while not(ind in curInd):
+                print(f"Invalid Input. Enter your the number from {curInd}")
+                ind = int(input())
+             return ind
+             
+    
+    
+    def allTrump(self,cards,suit):
+
+        for card in cards:
+            if card.suit != suit:
+                 break
+        else:
+             return True
+        return False
+    
+    def validCards(self,cards,currentSuit,trumpSuit):
+         
+         curSuitInd = []
+         trumpSuitInd = []
+         count = 0
+
+         for card in cards:
+              if card.suit == currentSuit:
+                   curSuitInd.append(count)
+              if card.suit == trumpSuit:
+                   trumpSuitInd.append(count)
+              count+=1
+
+         return curSuitInd,trumpSuitInd
+
+         
+    
 
     def step(self,action):
 
         if self.bidding:
-
+            
+            self.bidding = False
             print("The bidding starts now \n\n")
             print("Player 1 cards are: \n")
             self.printCards(self.player1Cards)
@@ -120,25 +168,25 @@ class GameEnv:
 
             if self.finalBid==1:
                 print("Player 1 cards, select your trump card by entering 0/1/2/3")
-                ind = self.selectTrump(self.player1Cards,0,3)
+                ind = self.selectCard(self.player1Cards)
                 self.playerTrump = self.player1Cards[ind]
                 self.player1Cards.pop(ind)
             
             if self.finalBid==2:
                 print("Player 2 cards, select your trump card by entering 0/1/2/3")
-                ind = self.selectTrump(self.player2Cards,0,3)
+                ind = self.selectCard(self.player2Cards)
                 self.playerTrump = self.player2Cards[ind]
                 self.player2Cards.pop(ind)
 
             if self.finalBid==3:
                 print("Player 3 cards, select your trump card by entering 0/1/2/3")
-                ind = self.selectTrump(self.player3Cards,0,3)
+                ind = self.selectCard(self.player3Cards)
                 self.playerTrump = self.player3Cards[ind]
                 self.player3Cards.pop(ind)
 
             if self.finalBid==4:
                 print("Player 4 cards, select your trump card by entering 0/1/2/3")
-                ind = self.selectTrump(self.player4Cards,0,3)
+                ind = self.selectCard(self.player4Cards)
                 self.playerTrump = self.player4Cards[ind]
                 self.player4Cards.pop(ind)
                  
@@ -214,25 +262,25 @@ class GameEnv:
                 
                 if self.finalBid==1:
                     print("Player 1 cards, select your trump card by entering 0/1/2/3...")
-                    ind = self.selectTrump(self.player1Cards,0,7)
+                    ind = self.selectCard(self.player1Cards)
                     self.playerTrump = self.player1Cards[ind]
                     self.player1Cards.pop(ind)
                 
                 if self.finalBid==2:
                     print("Player 2 cards, select your trump card by entering 0/1/2/3...")
-                    ind = self.selectTrump(self.player2Cards,0,7)
+                    ind = self.selectCard(self.player2Cards)
                     self.playerTrump = self.player2Cards[ind]
                     self.player2Cards.pop(ind)
                 
                 if self.finalBid==3:
                     print("Player 3 cards, select your trump card by entering 0/1/2/3...")
-                    ind = self.selectTrump(self.player3Cards,0,7)
+                    ind = self.selectCard(self.player3Cards)
                     self.playerTrump = self.player3Cards[ind]
                     self.player3Cards.pop(ind)
 
                 if self.finalBid==4:
                     print("Player 4 cards, select your trump card by entering 0/1/2/3...")
-                    ind = self.selectTrump(self.player4Cards,0,7)
+                    ind = self.selectCard(self.player4Cards)
                     self.playerTrump = self.player4Cards[ind]
                     self.player4Cards.pop(ind)
 
@@ -252,7 +300,19 @@ class GameEnv:
 
             print("Player 4 cards:")
             self.printCards(self.player4Cards)
+            
+# To test all trumps condition:
+        # self.testCards =  Cards.packOfSuit()
+        # self.playerTrump = self.testCards[0]
+        # self.player1Cards = self.testCards[1:8]
+        # self.player2Cards = self.testCards[8:16]
+        # self.player3Cards = self.testCards[16:24]
+        # self.player4Cards = self.testCards[24:32]
         
+        # self.playerCards1 = [self.player1Cards,self.player2Cards,self.player3Cards,self.player4Cards]
+        # self.finalBid = 1
+
+
         self.playerCards1 = [self.player1Cards,self.player2Cards,self.player3Cards,self.player4Cards]
 
         self.players = []
@@ -262,7 +322,8 @@ class GameEnv:
                 player = {'cards':self.playerCards1[i],'isTrump':i==(self.finalBid-1),'team':1 if i % 2 == 0 else 2, 'trump':self.playerTrump if i==(self.finalBid-1) else None}
                 self.players.append(player)
 
-        self.playerChance = random.randint(0,3)
+        # self.playerChance = random.randint(0,3)
+        self.playerChance = 0
         self.catches = []
         self.team1Catches = []
 
@@ -273,20 +334,20 @@ class GameEnv:
         self.gameDone = False
         self.trumpReveal = False
         self.bidding = False
+        
         self.catchNumber = 0
-        
-        
         self.currentCatch = []
         self.currentSuit = ''
-
+        self.trumpIndice = [0,0,0,0]
+        
+        self.trumpPlayed = False
         self.trumpSuit = self.playerTrump.suit
         print(f"Trump Suit: {self.trumpSuit}")
 
         for i in range(4):
             
             print("The cards already played are:")
-            for k in self.currentCatch:
-                print(k.identity())
+            self.printCards(self.currentCatch)
 
             self.playerChance = self.playerChance%4
             print(f"Player {self.playerChance+1}'s chance to play")
@@ -295,15 +356,11 @@ class GameEnv:
 
                 if self.players[self.playerChance]['isTrump']:
 
-                    if self.trumpReveal:
+                    if self.trumpReveal or self.allTrump(self.players[self.playerChance]['cards'],self.trumpSuit):
+                        
 
-                        print("Your valid card options are given below, enter the number to choose which card to play:")
-                        for j in range(len(self.players[self.playerChance]['cards'])):
-                            print(f"{j} : {self.players[self.playerChance]['cards'][j].identity()}")
-                        cardNum = int(input("Enter card number"))
-
-                        while cardNum<0 or cardNum> len(self.players[self.playerChance]['cards'])-1:
-                            cardNum = int(input(f"Invalid card number, Enter card number from 0 to {len(self.players[self.playerChance]['cards'])-1}"))
+                        print("00 Your valid card options are given below, enter the number to choose which card to play:")
+                        cardNum = self.selectCard(self.players[self.playerChance]['cards'])
 
                         self.currentCatch.append(self.players[self.playerChance]['cards'][cardNum])
                         self.currentSuit = self.players[self.playerChance]['cards'][cardNum].suit
@@ -312,6 +369,7 @@ class GameEnv:
                         
                         for j in self.players[self.playerChance]['cards']:
                             print(j.identity())
+                        print("\n\n")
                         print(f"{self.currentCatch[0].identity()}, {self.currentSuit}, {self.playerChance}")
 
                         self.playerChance+=1
@@ -325,34 +383,25 @@ class GameEnv:
                                 validCards.append(self.players[self.playerChance]['cards'][j])
                         
 
-                        print("Your valid card options are given below, enter the number to choose which card to play:")
-                        for j in range(len(validCards)):
-                            print(f"{j} : {validCards[j].identity()}")
-                        cardNum = int(input("Enter card number"))
-
-                        while cardNum<0 or cardNum> len(validCards)-1:
-                            cardNum = int(input(f"Invalid card number, Enter card number from 0 to {len(validCards)-1}"))
+                        print("01 Your valid card options are given below, enter the number to choose which card to play:")
+                        cardNum = self.selectCard(validCards)
 
                         self.currentCatch.append(validCards[cardNum])
                         self.currentSuit = validCards[cardNum].suit
                         self.players[self.playerChance]['cards'].remove(validCards[cardNum])
                         
-
+                        
                         for j in self.players[self.playerChance]['cards']:
                             print(j.identity())
+                        print("\n\n")
                         print(f"{self.currentCatch[0].identity()}, {self.currentSuit}, {self.playerChance}")
 
                         self.playerChance+=1
                 
                 else:
 
-                        print("Your valid card options are given below, enter the number to choose which card to play:")
-                        for j in range(len(self.players[self.playerChance]['cards'])):
-                            print(f"{j} : {self.players[self.playerChance]['cards'][j].identity()}")
-                        cardNum = int(input("Enter card number"))
-
-                        while cardNum<0 or cardNum> len(self.players[self.playerChance]['cards'])-1:
-                            cardNum = int(input(f"Invalid card number, Enter card number from 0 to {len(self.players[self.playerChance]['cards'])-1}"))
+                        print("10Your valid card options are given below, enter the number to choose which card to play:")
+                        cardNum = self.selectCard(self.players[self.playerChance]['cards'])
 
                         self.currentCatch.append(self.players[self.playerChance]['cards'][cardNum])
                         self.currentSuit = self.players[self.playerChance]['cards'][cardNum].suit
@@ -361,10 +410,145 @@ class GameEnv:
 
                         for j in self.players[self.playerChance]['cards']:
                             print(j.identity())
-                        print(f"{self.currentCatch[0].identity()}, {self.currentSuit}, {self.playerChance}")
+                        print("\n\n")
+                        print(f"{self.currentCatch[i].identity()}, {self.currentSuit}, {self.playerChance}")
 
                         self.playerChance+=1
+            else:
+                 
+                 
+                 curSuitInd,trumpSuitInd = self.validCards(self.players[self.playerChance]['cards'],self.currentSuit,self.trumpSuit)
+                 if len(curSuitInd)>0:
+                        
+                        print("11Your valid card options are given below, enter the number to choose which card to play:")
+                        cardNum = self.selectCard(self.players[self.playerChance]['cards'],1,curSuitInd)
 
+                        self.currentCatch.append(self.players[self.playerChance]['cards'][cardNum])
+                        self.players[self.playerChance]['cards'].pop(cardNum)
+
+                        for j in self.players[self.playerChance]['cards']:
+                            print(j.identity())
+                        print("\n\n")
+                        self.printCards(self.currentCatch)
+                        print(f"{self.currentSuit}, {self.playerChance}")
+                        
+                        self.playerChance+=1
+                 else:
+                       if not self.trumpReveal:
+                           
+                           
+                           print("Enter 1 to reveal trump or 0 to continue\n")
+                           reveal = int(input())
+
+                           if reveal == 1:
+                                
+                                
+                                print("The trump is ",self.playerTrump.identity())
+                                self.trumpReveal = True
+                                self.players[self.finalBid]['cards'].append(self.playerTrump)
+                                self.playerTrump = None
+
+                                if len(trumpSuitInd)>0:            
+                                    
+                                    
+                                    print("12Your valid card options are given below, enter the number to choose which card to play:")
+                                    cardNum = self.selectCard(self.players[self.playerChance]['cards'],1,trumpSuitInd)
+
+                                    self.currentCatch.append(self.players[self.playerChance]['cards'][cardNum])
+                                    self.players[self.playerChance]['cards'].pop(cardNum)
+
+                                    for j in self.players[self.playerChance]['cards']:
+                                        print(j.identity())
+                                    print("\n\n")
+                                    self.printCards(self.currentCatch)
+                                    print(f"{self.currentSuit}, {self.playerChance}")
+                                    
+                                    if self.currentSuit != self.trumpSuit:
+                                        self.trumpPlayed = True
+                                        self.trumpIndice[self.playerChance] = 1
+
+                                    self.playerChance+=1
+                                else:
+                                    
+                                    print("13Your valid card options are given below, enter the number to choose which card to play:")
+                                    cardNum = self.selectCard(self.players[self.playerChance]['cards'])
+
+                                    self.currentCatch.append(self.players[self.playerChance]['cards'][cardNum])
+                                    self.players[self.playerChance]['cards'].pop(cardNum)
+
+                                    for j in self.players[self.playerChance]['cards']:
+                                         print(j.identity())
+                                    print("\n\n")
+                                    self.printCards(self.currentCatch)
+                                    print(f"{self.currentSuit}, {self.playerChance}")
+
+                                    self.playerChance+=1
+                           else:
+                                    
+                                    print("14Your valid card options are given below, enter the number to choose which card to play:")
+                                    cardNum = self.selectCard(self.players[self.playerChance]['cards'])
+
+                                    
+                                    self.currentCatch.append(self.players[self.playerChance]['cards'][cardNum])
+                                    self.players[self.playerChance]['cards'].pop(cardNum)
+
+
+                                    for j in self.players[self.playerChance]['cards']:
+                                         print(j.identity())
+                                    print("\n\n")
+                                    self.printCards(self.currentCatch)
+                                    print(f"{self.currentSuit}, {self.playerChance}")
+
+                                    self.playerChance+=1
+                       else:
+                            
+                            print("15Your valid card options are given below, enter the number to choose which card to play:")
+                            cardNum = self.selectCard(self.players[self.playerChance]['cards'])
+
+                            if(self.players[self.playerChance]['cards'][cardNum].suit == self.trumpSuit) and self.currentSuit != self.trumpSuit:
+                                        self.trumpPlayed = True
+                                        self.trumpIndice[self.playerChance] = 1
+
+                            self.currentCatch.append(self.players[self.playerChance]['cards'][cardNum])
+                            self.players[self.playerChance]['cards'].pop(cardNum)
+
+                            for j in self.players[self.playerChance]['cards']:
+                                    print(j.identity())
+                            print("\n\n")
+                            self.printCards(self.currentCatch)
+                            print(f"{self.currentSuit}, {self.playerChance}")
+
+                            self.playerChance+=1
+
+        if self.trumpPlayed:
+             pass
+        else:
+             
+             maxOrder = -1
+             maxIndex = 0
+             count = 0
+
+             for card in self.currentCatch:
+                  
+                  if card.order > maxOrder:
+                       maxOrder = card.order
+                       maxIndex = count
+                  count+=1
+
+
+        self.trumpIndice = [0,0,0,0]
+        self.trumpPlayed = False
+        self.currentCatch = []
+
+
+
+#Reinitialize trump indice, trumpPlayed and currentCatch after every quad
+             
+             
+                      
+                      
+                      
+#Future code add: In the last catch if self.playerTrump is not none then it should be added to to the bidders hand
 
                             
                         
