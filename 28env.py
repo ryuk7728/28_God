@@ -452,28 +452,28 @@ class GameEnv:
                                     
                                     print("The trump is ",self.playerTrump.identity())
                                     self.trumpReveal = True
-                                    self.playerTrump = None
 
                                     if self.playerChance == (self.finalBid-1):
+                                         
                                          self.currentCatch.append(self.playerTrump)
+                                         self.playerTrump = None
                                          self.trumpPlayed = True
+
                                          self.trumpIndice[i] = 1
                                          for j in self.players[self.playerChance]['cards']:
                                             print(j.identity())
                                             print("\n\n")
                                             self.printCards(self.currentCatch)
                                             print(f"{self.currentSuit}, {self.playerChance}")
-
-                                    self.players[self.finalBid-1]['cards'].append(self.playerTrump)
-
                                     
 
-                                    if len(trumpSuitInd)>0:            
+                                    elif len(trumpSuitInd)>0:            
                                         
-                                        
+                                        self.players[self.finalBid-1]['cards'].append(self.playerTrump)
+                                        self.playerTrump = None
                                         print("12Your valid card options are given below, enter the number to choose which card to play:")
+                                        
                                         cardNum = self.selectCard(self.players[self.playerChance]['cards'],1,trumpSuitInd)
-
                                         self.currentCatch.append(self.players[self.playerChance]['cards'][cardNum])
                                         self.players[self.playerChance]['cards'].pop(cardNum)
 
@@ -490,9 +490,11 @@ class GameEnv:
                                         self.playerChance+=1
                                     else:
                                         
+                                        self.players[self.finalBid-1]['cards'].append(self.playerTrump)
+                                        self.playerTrump = None
                                         print("13Your valid card options are given below, enter the number to choose which card to play:")
+                                        
                                         cardNum = self.selectCard(self.players[self.playerChance]['cards'])
-
                                         self.currentCatch.append(self.players[self.playerChance]['cards'][cardNum])
                                         self.players[self.playerChance]['cards'].pop(cardNum)
 
@@ -555,7 +557,7 @@ class GameEnv:
                             maxIndex = count
                     count+=1
 
-                maxIndex = self.playerChance-4+maxIndex
+                maxIndex = (self.playerChance-4)%4+maxIndex
                 print(f"Player {maxIndex+1} played the highest card, the catch goes to team {self.players[maxIndex]['team']} getting {points} points")
                 if self.players[maxIndex]['team'] == 1:
                     self.team1Points += points
@@ -580,7 +582,7 @@ class GameEnv:
                             maxIndex = count
                     count+=1
                 
-                maxIndex = self.playerChance-4+maxIndex
+                maxIndex = (self.playerChance-4)%4+maxIndex
                 print(f"Player {maxIndex+1} played the highest card, the catch goes to team {self.players[maxIndex]['team']} getting {points} points")
                 if self.players[maxIndex]['team'] == 1:
                     self.team1Points += points
