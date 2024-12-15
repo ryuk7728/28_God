@@ -94,7 +94,6 @@ class GameEnv:
          trumpSuitInd = []
          count = 0
 
-         print("Card length:",cards)
 
          for card in cards:
               if card.suit == currentSuit:
@@ -104,6 +103,12 @@ class GameEnv:
               count+=1
 
          return curSuitInd,trumpSuitInd
+
+    def selectTrumpCard(self, playerNumber, playerCards):
+        print(f"Player {playerNumber} cards, select your trump card by entering 0/1/2/3")
+        ind = self.selectCard(playerCards)
+        self.playerTrump = playerCards[ind]
+        playerCards.pop(ind)
 
          
     
@@ -557,7 +562,7 @@ class GameEnv:
                             maxIndex = count
                     count+=1
 
-                maxIndex = (self.playerChance-4)%4+maxIndex
+                maxIndex = (self.playerChance-4+maxIndex)%4
                 print(f"Player {maxIndex+1} played the highest card, the catch goes to team {self.players[maxIndex]['team']} getting {points} points")
                 if self.players[maxIndex]['team'] == 1:
                     self.team1Points += points
@@ -582,7 +587,7 @@ class GameEnv:
                             maxIndex = count
                     count+=1
                 
-                maxIndex = (self.playerChance-4)%4+maxIndex
+                maxIndex = (self.playerChance-4+maxIndex)%4
                 print(f"Player {maxIndex+1} played the highest card, the catch goes to team {self.players[maxIndex]['team']} getting {points} points")
                 if self.players[maxIndex]['team'] == 1:
                     self.team1Points += points
