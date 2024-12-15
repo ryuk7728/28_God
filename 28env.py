@@ -105,10 +105,34 @@ class GameEnv:
          return curSuitInd,trumpSuitInd
 
     def selectTrumpCard(self, playerNumber, playerCards):
-        print(f"Player {playerNumber} cards, select your trump card by entering 0/1/2/3")
+
+        print(f"Player {playerNumber} cards, select your trump card by entering 0/1/2/3..")
         ind = self.selectCard(playerCards)
         self.playerTrump = playerCards[ind]
         playerCards.pop(ind)
+
+    def extendCards(self):
+
+        self.player1Cards.extend(self.cards[16:20])
+        self.player2Cards.extend(self.cards[20:24])
+        self.player3Cards.extend(self.cards[24:28])
+        self.player4Cards.extend(self.cards[28:])
+    
+    def performBidding(self, startBid, maxBid):
+         
+        bids = []
+        for i, playerCards in enumerate([self.player1Cards, self.player2Cards, self.player3Cards, self.player4Cards], start=1):
+            print(f"Player {i} cards are:")
+            self.printCards(playerCards)
+            
+            if self.round1Bid == i:
+                print((self.playerTrump).identity())
+            
+            maxCurrentBid = max([bid for bid in bids if bid != 0] + [startBid]) 
+            print(f"Enter your bid, greater than {maxCurrentBid} and max {maxBid}, or pass by entering 0")
+            bid = self.callBid(maxCurrentBid, maxBid)
+            bids.append(bid)
+        return bids
 
          
     
@@ -173,81 +197,22 @@ class GameEnv:
             print(f"The bids are: {self.player1Bid},{self.player2Bid},{self.player3Bid},{self.player4Bid}")
             print(f"The final bid is by player {self.finalBid} and the value is {self.finalBidValue}")
 
-            if self.finalBid==1:
-                print("Player 1 cards, select your trump card by entering 0/1/2/3")
-                ind = self.selectCard(self.player1Cards)
-                self.playerTrump = self.player1Cards[ind]
-                self.player1Cards.pop(ind)
-            
-            if self.finalBid==2:
-                print("Player 2 cards, select your trump card by entering 0/1/2/3")
-                ind = self.selectCard(self.player2Cards)
-                self.playerTrump = self.player2Cards[ind]
-                self.player2Cards.pop(ind)
-
-            if self.finalBid==3:
-                print("Player 3 cards, select your trump card by entering 0/1/2/3")
-                ind = self.selectCard(self.player3Cards)
-                self.playerTrump = self.player3Cards[ind]
-                self.player3Cards.pop(ind)
-
-            if self.finalBid==4:
-                print("Player 4 cards, select your trump card by entering 0/1/2/3")
-                ind = self.selectCard(self.player4Cards)
-                self.playerTrump = self.player4Cards[ind]
-                self.player4Cards.pop(ind)
+            if self.finalBid == 1:
+                self.selectTrumpCard(1, self.player1Cards)
+            elif self.finalBid == 2:
+                self.selectTrumpCard(2, self.player2Cards)
+            elif self.finalBid == 3:
+                self.selectTrumpCard(3, self.player3Cards)
+            elif self.finalBid == 4:
+                self.selectTrumpCard(4, self.player4Cards)
                  
-            self.player1Cards.extend(self.cards[16:20])
-            self.player2Cards.extend(self.cards[20:24])
-            self.player3Cards.extend(self.cards[24:28])
-            self.player4Cards.extend(self.cards[28:])
-
+            self.extendCards()
             self.round1Bid = self.finalBid
             self.round1BidValue = self.finalBidValue
 
-            print("Player 1 cards are:")
-            self.printCards(self.player1Cards)
-            
-            if self.round1Bid==1:
-                         print((self.playerTrump).identity())
-                    
-            
-            print(f"Enter your bid, greater than {23} and max 28 or pass by entering 0")
-            self.player1Bid = self.callBid(23,28)
-
-            print("Player 2 cards are:")
-            self.printCards(self.player2Cards)
-
-            if self.round1Bid==2:
-                         print((self.playerTrump).identity())        
-            
-            maxBid = max(self.player1Bid,23)
-
-            print(f"Enter your bid, greater than {maxBid} and max 28 or pass by entering 0") 
-            self.player2Bid = self.callBid(maxBid,28)
-                
-
-            print("Player 3 cards are:")
-            self.printCards(self.player3Cards)
-            
-            if self.round1Bid==3:
-                         print((self.playerTrump).identity())
-            
-            maxBid = max(self.player1Bid,self.player2Bid,23)
-
-            print(f"Enter your bid, greater than {maxBid} and max 28 or pass by entering 0")
-            self.player3Bid = self.callBid(maxBid,28)
-            
-            print("Player 4 cards are:")
-            self.printCards(self.player4Cards)
-            if self.round1Bid==4:
-                         print((self.playerTrump).identity())        
-            maxBid = max(self.player1Bid,self.player2Bid,self.player3Bid,23)
-
-            print(f"Enter your bid, greater than {maxBid} and max 28 or pass by entering 0")
-            self.player4Bid = self.callBid(maxBid,28)
-            
-            bids = [self.player1Bid,self.player2Bid,self.player3Bid,self.player4Bid]
+            # Start the next round of bidding
+            bids = self.performBidding(23, 28)
+            self.player1Bid, self.player2Bid, self.player3Bid, self.player4Bid = bids
             self.finalBidValue = max(bids)
             self.finalBid = np.argmax(bids)+1 
 
@@ -257,56 +222,26 @@ class GameEnv:
 
                 if self.round1Bid == 1:
                     self.player1Cards.append(self.playerTrump)
-
                 if self.round1Bid == 2:
                     self.player2Cards.append(self.playerTrump)
-
                 if self.round1Bid == 3:
                     self.player3Cards.append(self.playerTrump)
-
                 if self.round1Bid == 4:
                     self.player4Cards.append(self.playerTrump)
                 
-                if self.finalBid==1:
-                    print("Player 1 cards, select your trump card by entering 0/1/2/3...")
-                    ind = self.selectCard(self.player1Cards)
-                    self.playerTrump = self.player1Cards[ind]
-                    self.player1Cards.pop(ind)
-                
-                if self.finalBid==2:
-                    print("Player 2 cards, select your trump card by entering 0/1/2/3...")
-                    ind = self.selectCard(self.player2Cards)
-                    self.playerTrump = self.player2Cards[ind]
-                    self.player2Cards.pop(ind)
-                
-                if self.finalBid==3:
-                    print("Player 3 cards, select your trump card by entering 0/1/2/3...")
-                    ind = self.selectCard(self.player3Cards)
-                    self.playerTrump = self.player3Cards[ind]
-                    self.player3Cards.pop(ind)
-
-                if self.finalBid==4:
-                    print("Player 4 cards, select your trump card by entering 0/1/2/3...")
-                    ind = self.selectCard(self.player4Cards)
-                    self.playerTrump = self.player4Cards[ind]
-                    self.player4Cards.pop(ind)
+                if self.finalBid == 1:
+                    self.selectTrumpCard(1, self.player1Cards)
+                elif self.finalBid == 2:
+                    self.selectTrumpCard(2, self.player2Cards)
+                elif self.finalBid == 3:
+                    self.selectTrumpCard(3, self.player3Cards)
+                elif self.finalBid == 4:
+                    self.selectTrumpCard(4, self.player4Cards)
 
             else:
                 self.finalBid = self.round1Bid
                 self.finalBidValue = self.round1BidValue
                 print(f"No further bids have been placed, the final bid is by player {self.finalBid} and the value is {self.finalBidValue}")
-
-            print("Player 1 cards:")
-            self.printCards(self.player1Cards)
-
-            print("Player 2 cards:")
-            self.printCards(self.player2Cards)
-
-            print("Player 3 cards:")
-            self.printCards(self.player3Cards)
-
-            print("Player 4 cards:")
-            self.printCards(self.player4Cards)
             
 # To test all trumps condition:
         # self.testCards =  Cards.packOfSuit()
@@ -337,12 +272,8 @@ class GameEnv:
         self.team2Catches = []
         self.team1Points = 0
         self.team2Points = 0
-
-        self.gameDone = False
         self.trumpReveal = False
-        self.bidding = False
         
-        self.catchNumber = 0
         self.currentCatch = []
         self.currentSuit = ''
         self.trumpIndice = [0,0,0,0]
@@ -360,8 +291,6 @@ class GameEnv:
                 
                 print("The cards already played are:")
                 self.printCards(self.currentCatch)
-
-                self.playerChance = self.playerChance%4
                 print(f"Player {self.playerChance+1}'s chance to play")
 
                 if i==0:
@@ -599,7 +528,7 @@ class GameEnv:
                     print(self.team2Points)
 
 
-           
+            self.catches.append(self.currentCatch)
             self.trumpIndice = [0,0,0,0]
             self.trumpPlayed = False
             self.currentCatch = []
@@ -620,31 +549,6 @@ class GameEnv:
              else:
                   print(f"Team 1 has beat team 2 with a total of {self.team1Points} points")
 
-#Handle the case where the person who called wishes to cut by revealing, need to add element to trumpIndice
-
-# Traceback (most recent call last):
-#   File "c:\Users\ryuk7\Projects\RL428\28env.py", line 621, in <module>
-#     env.step(action=0)
-#   File "c:\Users\ryuk7\Projects\RL428\28env.py", line 464, in step
-#     self.printCards(self.currentCatch)
-#   File "c:\Users\ryuk7\Projects\RL428\28env.py", line 26, in printCards
-#     print(card.identity())
-# AttributeError: 'NoneType' object has no attribute 'identity'
-
-# Traceback (most recent call last):
-#   File "c:\Users\ryuk7\Projects\RL428\28env.py", line 619, in <module>
-#     env.step(action=0)
-#   File "c:\Users\ryuk7\Projects\RL428\28env.py", line 425, in step
-#     curSuitInd,trumpSuitInd = self.validCards(self.players[self.playerChance]['cards'],self.currentSuit,self.trumpSuit)
-#   File "c:\Users\ryuk7\Projects\RL428\28env.py", line 98, in validCards
-#     if card.suit == currentSuit:
-# AttributeError: 'NoneType' object has no attribute 'suit'
-#     env.step(action=0)
-#   File "c:\Users\ryuk7\Projects\RL428\28env.py", line 425, in step
-#     curSuitInd,trumpSuitInd = self.validCards(self.players[self.playerChance]['cards'],self.currentSuit,self.trumpSuit)
-#   File "c:\Users\ryuk7\Projects\RL428\28env.py", line 98, in validCards
-#     if card.suit == currentSuit:
-# AttributeError: 'NoneType' object has no attribute 'suit'
         
 
 
