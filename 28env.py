@@ -137,13 +137,13 @@ class GameEnv:
 
         print(f"{id} Your valid card options are given below, enter the number to choose which card to play:")
         
-        if init == "0":
+        if init == "0" or init == "2":
             cardNum = self.selectCard(validCards)
         else:
             cardNum = self.selectCard(validCards,1,ind)
         
         if init=="2":
-             if(self.players[self.playerChance]['cards'][cardNum].suit == self.trumpSuit) and self.currentSuit != self.trumpSuit:
+             if(self.players[self.playerChance]['cards'][cardNum].suit == self.trumpSuit) and self.currentSuit != self.trumpSuit and self.trumpReveal == True:
                 self.trumpPlayed = True
                 self.trumpIndice[ind[0]] = 1
 
@@ -160,12 +160,75 @@ class GameEnv:
 
         self.playerChance+=1
 
+    
+    # def startPlayerBid(self, playerNum, minBid, maxBid):
+    #     """
+    #     Handles the bidding for a single player dynamically.
+    #     """
+    #     playerCards = [self.player1Cards, self.player2Cards, self.player3Cards, self.player4Cards]
+    #     print(f"Player {playerNum} cards are:")
+    #     self.printCards(playerCards[playerNum - 1])  # Access player cards dynamically
+    #     print(f"Enter your bid, greater than {minBid} and max {maxBid}, or pass by entering 0")
+    #     bid = self.callBid(minBid, maxBid)
+    #     return bid
+
+
+    # def processBidding(self):
+    #     """
+    #     Manages the entire bidding phase.
+    #     """
+    #     self.bidding = False
+    #     print("The bidding starts now \n\n")
+        
+    #     # Player 1 bidding
+    #     self.player1Bid = self.startPlayerBid(1, 13, 23)
+    #     self.finalBid = 1  # Initialize final bid to player 1
+
+    #     # Player 2 bidding
+    #     self.player2Bid = self.startPlayerBid(2, self.player1Bid, 23)
+    #     self.player2pass, self.finalBid = self.passCheck(self.player2Bid, self.finalBid, 2)
+        
+    #     # Player 3 bidding
+    #     bidMax = self.player2Bid if not self.player2pass else max(self.player1Bid, 19)
+    #     self.player3Bid = self.startPlayerBid(3, bidMax, 23)
+    #     self.player3pass, self.finalBid = self.passCheck(self.player3Bid, self.finalBid, 3)
+        
+    #     # Player 4 bidding
+    #     bids = [self.player1Bid, self.player2Bid, self.player3Bid, 0]
+    #     greater = max(bids[self.finalBid - 1], 19) if self.finalBid == 2 else bids[self.finalBid - 1]
+    #     self.player4Bid = self.startPlayerBid(4, greater, 23)
+    #     if self.player4Bid != 0:
+    #         self.finalBid = 4
+
+    #     # Finalize bidding results
+    #     bids = [self.player1Bid, self.player2Bid, self.player3Bid, self.player4Bid]
+    #     self.finalBidValue = bids[self.finalBid - 1]
+    #     print(f"The bids are: {self.player1Bid}, {self.player2Bid}, {self.player3Bid}, {self.player4Bid}")
+    #     print(f"The final bid is by player {self.finalBid} and the value is {self.finalBidValue}")
+
+
+
          
     
 
     def step(self,action):
 
         if self.bidding:
+
+            # self.processBidding()
+
+            # cards = [self.player1Cards,self.player2Cards,self.player3Cards,self.player4Cards,]
+            # for i in range (4):
+            #      min = 0
+            #      max = 23
+            #      if i==0:
+            #           min = 13
+            #      elif i==1:
+            #           min = self.player1Bid
+                 
+            #      print(f"Player {i+1} cards are:\n")
+            #      self.printCards(cards[i])
+
             
             self.bidding = False
             print("The bidding starts now \n\n")
@@ -317,8 +380,9 @@ class GameEnv:
                 
                 print("The cards already played are:")
                 self.printCards(self.currentCatch)
-                print(f"Player {self.playerChance+1}'s chance to play")
                 self.playerChance = self.playerChance%4
+                print(f"Player {self.playerChance+1}'s chance to play")
+                
 
                 if i==0:
 
@@ -372,6 +436,7 @@ class GameEnv:
 
                                     if self.playerChance == (self.finalBid-1):
                                          
+                                         print("You have played your trump")
                                          self.currentCatch.append(self.playerTrump)
                                          self.playerTrump = None
                                          self.trumpPlayed = True
@@ -411,7 +476,7 @@ class GameEnv:
                                         
                                         self.players[self.finalBid-1]['cards'].append(self.playerTrump)
                                         self.playerTrump = None
-                                        self.selectValidCard(self.players[self.playerChance]['cards'],id="13",init="1")
+                                        self.selectValidCard(self.players[self.playerChance]['cards'],id="13",init="2")
                                         # print("13Your valid card options are given below, enter the number to choose which card to play:")
                                         
                                         # cardNum = self.selectCard(self.players[self.playerChance]['cards'])
@@ -427,7 +492,7 @@ class GameEnv:
                                         # self.playerChance+=1
                             else:
                                         
-                                        self.selectValidCard(self.players[self.playerChance]['cards'],id="14",init="1")
+                                        self.selectValidCard(self.players[self.playerChance]['cards'],id="14",init="2")
                                         # print("14Your valid card options are given below, enter the number to choose which card to play:")
                                         # cardNum = self.selectCard(self.players[self.playerChance]['cards'])
 
@@ -464,6 +529,8 @@ class GameEnv:
                                 # print(f"{self.currentSuit}, {self.playerChance}")
 
                                 # self.playerChance+=1
+            print("The cards already played are:")
+            self.printCards(self.currentCatch)
             print(len(self.currentCatch))
             maxIndex = 0
             if self.trumpPlayed:
