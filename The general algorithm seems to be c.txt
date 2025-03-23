@@ -1,0 +1,30 @@
+The general algorithm seems to be calculate the action utilities for a decision node (action_utils), which is basically the rewards received for taking actions. If taking an action has a decision node instead of terminal node then the average reward of that subsequent decision node is taken
+Calculate the average reward received (util) based on multiplying the current strategy and the action utilities.
+Subtract the average reward from the action utilities to get the regret values
+The reach probability of a player at given node is the product of all the decisions that the player had to make in his previous decision node using his current strategy(Initially it'll be 0.5)
+For the given node (information set):
+	the reach probability of the node is updated to the reach probability of the current player
+	the regret_sum variable of the node is updated to the opposing 	players reach probability*regrets (its weighted by the opposing 	players reach probability because the regrets should also account for	the likelihood of reaching the current node/information set based on the opponents current strategy of playing based on the current set of cards)
+
+After the above is done:
+
+We update the strategy for each node:
+For each node:
+# The below 2 lines accounts for the strategy used in the current iteration
+
+self.strategy_sum += self.reach_pr * self.strategy (We find the weighted sum of the strategies in different iterations)
+self.reach_pr_sum += self.reach_pr (We find the sum of reach probabilities of the current player)
+
+#The below line develops the strategy of the next iteration, based on the results of the current iteration
+
+self.strategy = self.get_strategy() (Using the cumulative regrets present in self.regret_sum, we obtain the current strategy using the regret matching formula i.e negative regrets are made to 0 and we find the sum of the regret array and divide the array by the sum)
+# self.regret_sum accounts for the opponents players reach probability i.e his contribution to the current situation. Using self.regret_sum we obtain the strategy.
+self.reach_pr = 0 (Resets the reach probability of the player)
+
+So basically in the playing process we only weight the playing strategies based on the opponents reach probability but in the average strategy we also take into account the current players reach probability
+
+Average Strategy of a player:
+
+avg_strategy = self.strategy_sum / self.reach_pr_sum 
+total = sum(avg_strategy) = nan
+avg_strategy = strategy/total = [nan,nan]

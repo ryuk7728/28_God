@@ -1,0 +1,24 @@
+Minimax(s){
+
+if terminal(s){
+return value(s)
+}
+
+if player(s) == max{
+value = -inf
+for a in actions(s){
+value = max(value,minimax(result(s,a))
+}
+return value
+}
+
+if player(s) == min{
+value = inf
+for a in actions(s){
+value = min(value,minimax(result(s,a))
+}
+return value
+}
+
+
+

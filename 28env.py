@@ -298,6 +298,7 @@ class GameEnv:
             if h==7 and self.playerTrump != None:
                  self.players[self.finalBid-1]['cards'].append(self.playerTrump)
                  self.playerTrump = None
+                 self.trumpReveal = True #Need to verify with rules
             for i in range(4):
                 
                 print("The cards already played are:")
@@ -366,9 +367,9 @@ class GameEnv:
                                         self.selectValidCard(self.players[self.playerChance]['cards'],id="12",init="1",ind=trumpSuitInd)
                                         print("12Your valid card options are given below, enter the number to choose which card to play:")           
                                         
-                                        if self.currentSuit != self.trumpSuit:
-                                            self.trumpPlayed = True
-                                            self.trumpIndice[i] = 1
+                                        
+                                        self.trumpPlayed = True
+                                        self.trumpIndice[i] = 1
 
                                     else:
                                         
