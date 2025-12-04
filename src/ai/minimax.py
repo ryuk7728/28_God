@@ -1,0 +1,543 @@
+import copy
+from cards import Cards
+import random
+import numpy as np
+import pickle
+
+#Checks if all the cards is from the suit specified
+def allTrump(cards,suit):
+
+        for card in cards:
+            if card.suit != suit:
+                 break
+        else:
+             return True
+        return False
+
+
+# Saves the four player card arrays to a file.
+def save_player_cards(filename, p1, p2, p3, p4):
+    players = {
+        "player1Cards": p1,
+        "player2Cards": p2,
+        "player3Cards": p3,
+        "player4Cards": p4
+    }
+    with open(filename, "wb") as f:
+        pickle.dump(players, f)
+    print(f"Player cards saved to {filename}.")
+
+# Loads the four player card arrays from a file and returns them.
+def load_player_cards(filename):
+    with open(filename, "rb") as f:
+        players = pickle.load(f)
+    print(f"Player cards loaded from {filename}.")
+    return players["player1Cards"], players["player2Cards"], players["player3Cards"], players["player4Cards"]
+
+#Based on the  current suit and trumpsuit it checks the existing cards to find the cards that match the current suit and trumpcards in the players hands
+def validCard(cards,currentSuit,trumpSuit):
+         
+         curSuitInd = []
+         trumpSuitInd = []
+         count = 0
+
+         for card in cards:
+              if card.suit == currentSuit:
+                   curSuitInd.append(count)
+              if card.suit == trumpSuit:
+                   trumpSuitInd.append(count)
+              count+=1
+
+         return curSuitInd,trumpSuitInd
+
+
+# Pretty obv -> Prints the players cards
+def printCards(cards):
+        for card in cards:
+                print(card.identity())
+
+#Returns which players chance it is by adding 1 to the length of the state, for example if the state list is length 0 then its Player 1's chance
+def chance(s):
+    return (len(s)+1)
+
+#Takes the state of the game and returns the points of the winning team, positive if team1 and negative if team2
+def checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit):
+    currentCatch = s
+    if len(s)==4:
+            maxIndex = 0 # Used to determine which players chance is next
+            if trumpPlayed: #If the trump card is played somewhere in the catch
+                maxOrder = -1 # Finds which trump is the highest 
+                count = 0 # count variable which accounts for index
+                points = 0 #Accumulates points
+
+                for card in currentCatch:
+                    
+                    points += card.points
+                    if trumpIndice[count] == 1: # trumpIndice has the indices at which trump was played Eg. [0,1,0,0]
+                        if card.order > maxOrder:
+                            maxOrder = card.order 
+                            maxIndex = count
+                    count+=1
+
+                maxIndex = (playerChance+maxIndex)%4 # Does initial player + maxIndex(how many places away from initial player) mod 4 to get the highest player
+                # print("The catch is: ")
+                # printCards(s)
+                # print("\n")
+                # print(f"Player {maxIndex+1} played the highest card, the catch goes to team {players[maxIndex]['team']} getting {points} points")
+                if players[maxIndex]['team'] == 1:
+                    return points
+                else:
+                    return -1*points
+            else:
+                # This part of the code explores the case where trump wasnt played
+                maxOrder = -1 # Same as earlier
+                count = 0
+                points = 0
+
+                #Easily understandable- it iterates through all cards to find highest card of the starting suit
+                for card in currentCatch:
+                    
+                    points += card.points
+                    if card.suit == currentSuit:
+                        if card.order > maxOrder:
+                            maxOrder = card.order
+                            maxIndex = count
+                    count+=1
+                
+
+                maxIndex = (playerChance+maxIndex)%4 #inital player + maxIndex(how many places away from initial player) mod 4 to get the highest player
+                # print("The catch is: ")
+                # printCards(s)
+                # print("\n")
+                # print(f"Player {maxIndex+1} played the highest card, the catch goes to team {players[maxIndex]['team']} getting {points} points")
+                if players[maxIndex]['team'] == 1:
+                    return points
+                else:
+                    return -1*points
+    else:
+        return -100
+    
+# Verify with rules and add the condition that when its the last trick, and the trump player hasnt revealed his trump then the when its played it behaves like an active trump
+def actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal=-1,playerChance=0):
+    # Gets the updated player chance by using mod for reset
+    playerChance=(playerChance+len(s))%4
+    #First player in in the catchs' chance
+    if  (chance(s)-1)==0:
+        # Trump Call Player
+        if players[playerChance]['isTrump']:
+                        #If trump is already revealed or the player has all trumps, all cards are valid
+                        if trumpReveal or allTrump(players[playerChance]['cards'],trumpSuit):
+                            return (players[playerChance]['cards'])
+                        #If trump is not revealed then non trump cards are valid
+                        else:
+                            validCards = []
+                            for j in range(len(players[playerChance]['cards'])):
+                                if not players[playerChance]['cards'][j].suit == trumpSuit:
+                                    validCards.append(players[playerChance]['cards'][j])
+                            
+                            return validCards
+        else:
+                            #First player but non trump implies all cards are valid
+                             return (players[playerChance]['cards'])
+    
+    #Non first chance player
+    else:
+                    #Gets the indices of the current suit cards and trump suit cards from the player
+                    curSuitInd,trumpSuitInd = validCard(players[playerChance]['cards'],currentSuit,trumpSuit)
+                    if len(curSuitInd)>0: #If the player has cards of the current suit, he should play among them
+                            
+                            validCards = [players[playerChance]['cards'][i] for i in curSuitInd] # Returning the currentsuit cards back in a list
+                            return validCards
+                            
+                            # selectValidCard(players[playerChance]['cards'],init="1",ind=curSuitInd) 
+                    
+                    #If player doesnt have cards of the current suit      
+                    else:
+                        # If the player has the option to reveal trump or not and he hasnt chosen then the 2 options is provided as actions
+                        if not trumpReveal and not chose: 
+                            return [False,True]
+                        
+                        # In this case the player chose one of the options and its stored in trumpreveal
+                        elif chose: 
+                            
+                            #If player chose to reveal trump
+                            if trumpReveal:
+                                    
+                                    
+                                    # print("The trump is ",self.playerTrump.identity())
+                                    # trumpReveal = True
+
+                                    #If the current player is the player who put the trump down
+                                    if playerChance == (finalBid-1): 
+                                         
+                                        #  print("You have played your trump")
+                                        # playerTrump = None
+                                        # trumpPlayed = True
+                                        # trumpIndice[len(s)] = 1
+                                        players[finalBid-1]['cards'].append(playerTrump)
+                                        return [playerTrump]
+                                        #  self.currentCatch.append(self.playerTrump)
+
+
+                                        #  self.trumpIndice[i] = 1
+                                        #  for j in self.players[self.playerChance]['cards']:
+                                        #     print(j.identity())
+                                        #     print("\n\n")
+                                        #     self.printCards(self.currentCatch)
+                                        #     print(f"{self.currentSuit}, {self.playerChance}")
+                                    
+                                    # If its a non trump calling player and he has trump
+                                    elif len(trumpSuitInd)>0:            
+                                        
+                                        # players[finalBid-1]['cards'].append(playerTrump)
+                                        # playerTrump = None
+                                        # trumpPlayed = True
+                                        # trumpIndice[len(s)] = 1
+                                        validCards = [players[playerChance]['cards'][i] for i in trumpSuitInd] # Returning the currentsuit cards back in a list
+                                        return validCards                                        
+
+                                    #Non trump calling player and he doesnt have trump cards
+                                    else:
+                                        
+                                        # players[finalBid-1]['cards'].append(playerTrump)
+                                        # playerTrump = None
+                                        return players[playerChance]['cards']
+                            #Player chose not to reveal trump
+                            else:
+                                        
+                                        return players[playerChance]['cards']
+
+                        else:
+                                
+                                #Last Case: The card played by minimax should affect the variables related to trumpPlayed and trumpIndice depending on whether the player played a trump card or not (It seems like its been taken care of in the result function)
+                                return players[playerChance]['cards']
+                        
+# Removes a particular card from the set of cards
+def removeCard(cards,card):
+      for k in cards:
+            if k.identity() == card.identity():
+                cards.remove(k)
+                break
+
+#This function determines the change in state of the game when a particular action is taken
+def result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance):
+    # If action taken is card played
+    if not (a == True or a == False): 
+        s.append(a)
+        # print("The card played is ",a.identity())
+        # for s2 in players[len(s)-1]['cards']:
+        #     print(s2.identity())
+        # print("\n\n")
+        # for s1 in s:
+        #     print(s1.identity())
+        # print("\n\n")
+        removeCard(players[(playerChance+len(s)-1)%4]['cards'],a)
+        # players[len(s)-1]['cards'].remove(a) #Only applicable in first trick, need to modify for second trick onwards to track whos chance it is
+        # If its the first card played
+        if len(s)==1: 
+            currentSuit = a.suit
+            return currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid
+        #If its 2nd onward card played
+        else: 
+            if trumpReveal and a.suit==trumpSuit:
+                trumpPlayed = True
+                trumpIndice[len(s)-1] = 1
+
+            if a==playerTrump:
+                playerTrump = None
+
+            return currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid
+    # If action taken is choosing or not choosing to reveal trump
+    else: 
+        if a and ((playerChance+len(s)+1)%4)!=finalBid: #If player chose to reveal trump and he isnt the trump player then the trump player adds the hidden trump to his cards
+            players[finalBid-1]['cards'].append(playerTrump)
+            playerTrump = None
+        chose = True
+        trumpReveal = a
+        return currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid
+
+                        
+
+reward_distribution = []
+def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal):
+      
+      if checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)!=-100:
+            return checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)
+      
+      if (playerChance+chance(s))%2!=0:
+          value = -1000
+          act = copy.deepcopy(actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance))
+          chose = False
+          for a in act:
+                s_copy = copy.deepcopy(s)
+                currentSuit_copy = copy.deepcopy(currentSuit)
+                trumpReveal_copy = copy.deepcopy(trumpReveal)
+                chose_copy = copy.deepcopy(chose) 
+                playerTrump_copy = copy.deepcopy(playerTrump)
+                trumpPlayed_copy = copy.deepcopy(trumpPlayed)
+                trumpIndice_copy = copy.deepcopy(trumpIndice)
+                players_copy = copy.deepcopy(players)
+               
+                currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+                newtake = minimax(s,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal)
+                value = max(value,newtake)
+                
+                s = s_copy
+                currentSuit = currentSuit_copy
+                trumpReveal = trumpReveal_copy
+                chose = chose_copy
+                playerTrump = playerTrump_copy
+                trumpPlayed = trumpPlayed_copy
+                trumpIndice = trumpIndice_copy
+                players = players_copy
+                
+                if first:
+                    reward_distribution.append(newtake)
+      else:
+          value = 1000
+          act1 =  copy.deepcopy(actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance)) 
+          chose = False
+          for a in act1:
+                s_copy1 = copy.deepcopy(s)
+                currentSuit_copy1 = copy.deepcopy(currentSuit)
+                trumpReveal_copy1 = copy.deepcopy(trumpReveal)
+                chose_copy1 = copy.deepcopy(chose)
+                playerTrump_copy1 = copy.deepcopy(playerTrump)
+                trumpPlayed_copy1 = copy.deepcopy(trumpPlayed)
+                trumpIndice_copy1 = copy.deepcopy(trumpIndice)
+                players_copy1 = copy.deepcopy(players)
+                
+                currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+                newtake = minimax(s,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal)
+                value = min(value,newtake)
+
+
+                s = s_copy1
+                currentSuit = currentSuit_copy1
+                trumpReveal = trumpReveal_copy1
+                chose = chose_copy1
+                playerTrump = playerTrump_copy1
+                trumpPlayed = trumpPlayed_copy1
+                trumpIndice = trumpIndice_copy1
+                players = players_copy1
+                
+                if first:
+                    reward_distribution.append(newtake)
+                
+      
+      return value
+            
+
+
+
+
+# cards = Cards.packOf28()    
+# random.shuffle(cards)
+
+# player1Cards = cards[0:8]
+# player2Cards = cards[8:16]
+# player3Cards = cards[16:24]
+# player4Cards = cards[24:32]
+
+# print("Player 1:")
+# printCards(player1Cards)
+# print("\n")
+# printCards(player2Cards)
+# print("\n")
+# printCards(player3Cards)
+# print("\n")
+# printCards(player4Cards)
+
+# # Save the player card arrays to a file
+# save_player_cards(save_filename, player1Cards, player2Cards, player3Cards, player4Cards)
+
+# Later on (or in another program run) you can load the player card arrays back:
+save_filename = "player_cards.pkl"
+loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards = load_player_cards(save_filename)
+
+
+
+x = copy.deepcopy(loaded_player1Cards)
+x1 = copy.deepcopy(loaded_player2Cards)
+x2 = copy.deepcopy(loaded_player3Cards)
+x3 = copy.deepcopy(loaded_player4Cards)
+
+# avg_rewards = np.array([0,0,0,0,0,0,0,0])
+# remainingCards = loaded_player2Cards+loaded_player3Cards+loaded_player4Cards
+# loaded_player1Cards.remove(loaded_player1Cards[1])
+# loaded_player1Cards.remove(loaded_player1Cards[2])
+# loaded_player1Cards.remove(loaded_player1Cards[3])
+# loaded_player2Cards.remove(loaded_player2Cards[1])
+# loaded_player2Cards.remove(loaded_player2Cards[0])
+# loaded_player2Cards.remove(loaded_player2Cards[5])
+# loaded_player3Cards.remove(loaded_player3Cards[4])
+# loaded_player3Cards.remove(loaded_player3Cards[5])
+# loaded_player3Cards.remove(loaded_player3Cards[0])
+# loaded_player4Cards.remove(loaded_player4Cards[1])
+# loaded_player4Cards.remove(loaded_player4Cards[4])
+# loaded_player4Cards.remove(loaded_player4Cards[0])
+lset = copy.deepcopy(loaded_player1Cards)
+lset2 = copy.deepcopy(loaded_player2Cards)
+lset3 = copy.deepcopy(loaded_player3Cards)
+lset4 = copy.deepcopy(loaded_player4Cards)
+# printCards(loaded_player2Cards)
+# print("\n")
+# printCards(loaded_player2Cards)
+# print("\n")
+# printCards(loaded_player3Cards)
+# print("\n")
+# printCards(loaded_player4Cards)
+remainingCards = loaded_player2Cards+loaded_player3Cards+loaded_player4Cards
+sample_size = 500
+# ranks = ["Seven","Eight","Queen","King","Ten","Ace","Nine","Jack"]
+
+# # Create cards for Player 1
+# nloaded_player1Cards = [
+#     Cards("Hearts", "Seven", 0, ranks.index("Seven")),
+#     Cards("Clubs", "Queen", 0, ranks.index("Queen")),
+#     Cards("Spades", "Queen", 0, ranks.index("Queen")),
+#     Cards("Spades", "Jack", 3, ranks.index("Jack")),
+#     Cards("Diamonds", "Ace", 1, ranks.index("Ace")),
+#     Cards("Clubs", "Ace", 1, ranks.index("Ace"))
+# ]
+
+# # Create cards for Player 2
+# nloaded_player2Cards = [
+#     Cards("Spades", "Seven", 0, ranks.index("Seven")),
+#     Cards("Spades", "Ace", 1, ranks.index("Ace")),
+#     Cards("Spades", "Ten", 1, ranks.index("Ten")),
+#     Cards("Clubs", "Ten", 1, ranks.index("Ten")),
+#     Cards("Clubs", "Nine", 2, ranks.index("Nine")),
+#     Cards("Clubs", "Jack", 3, ranks.index("Jack"))
+# ]
+
+# # Create cards for Player 3
+# nloaded_player3Cards = [
+#     Cards("Spades", "Eight", 0, ranks.index("Eight")),
+#     Cards("Spades", "Nine", 2, ranks.index("Nine")),
+#     Cards("Diamonds", "Nine", 2, ranks.index("Nine")),
+#     Cards("Hearts", "Queen", 0, ranks.index("Queen")),
+#     Cards("Spades", "King", 0, ranks.index("King")),
+#     Cards("Diamonds", "Queen", 0, ranks.index("Queen"))
+# ]
+
+# # Create cards for Player 4
+# nloaded_player4Cards = [
+#     Cards("Clubs", "Eight", 0, ranks.index("Eight")),
+#     Cards("Diamonds", "Ten", 1, ranks.index("Ten")),
+#     Cards("Hearts", "King", 0, ranks.index("King")),
+#     Cards("Clubs", "Seven", 0, ranks.index("Seven")),
+#     Cards("Clubs", "King", 0, ranks.index("King")),
+#     Cards("Hearts", "Ace", 1, ranks.index("Ace"))
+# ]
+print("Player 1:")
+printCards(loaded_player1Cards)
+print("\nPlayer 2:")
+printCards(loaded_player2Cards)
+print("\nPlayer 3:")
+printCards(loaded_player3Cards)
+print("\nPlayer 4:")
+printCards(loaded_player4Cards)
+for j in range(sample_size):
+    print(j)
+    random.shuffle(remainingCards)
+    # print(len(remainingCards))
+    # loaded_player1Cards = copy.deepcopy(nloaded_player1Cards)
+    # loaded_player2Cards = copy.deepcopy(nloaded_player2Cards)
+    # loaded_player3Cards = copy.deepcopy(nloaded_player3Cards)
+    # loaded_player4Cards = copy.deepcopy(nloaded_player4Cards)
+    # loaded_player1Cards = copy.deepcopy(remainingCards[0:5])
+    loaded_player2Cards = copy.deepcopy(remainingCards[0:8])
+    loaded_player3Cards = copy.deepcopy(remainingCards[8:16])
+    loaded_player4Cards = copy.deepcopy(remainingCards[16:24])
+    # print("Player 1:")
+    # printCards(loaded_player1Cards)
+    # print("\nPlayer 2:")
+    # printCards(loaded_player2Cards)
+    # print("\nPlayer 3:")
+    # printCards(loaded_player3Cards)
+    # print("\nPlayer 4:")
+    # printCards(loaded_player4Cards)
+    # print("P1:")
+    # printCards(loaded_player1Cards)
+    # print("\n")
+    # print("P2:")
+    # print("\n")
+    # printCards(loaded_player2Cards)
+    # print("P3:")
+    # print("\n")
+    # printCards(loaded_player3Cards)
+    # print("P4:")
+    # print("\n")
+    # printCards(loaded_player4Cards)
+    # loaded_player1Cards = copy.deepcopy(x)
+    # loaded_player2Cards = copy.deepcopy(x1)
+    # loaded_player3Cards = copy.deepcopy(x2)
+    # loaded_player4Cards = copy.deepcopy(x3)
+
+    # print("\nLoaded Player 1 Cards:")
+    # printCards(loaded_player1Cards)
+    # print("\nLoaded Player 2 Cards:")
+    # printCards(loaded_player2Cards)
+    # print("\nLoaded Player 3 Cards:")
+    # printCards(loaded_player3Cards)
+    # print("\nLoaded Player 4 Cards:")
+    # printCards(loaded_player4Cards)
+
+    s = []
+    # s = [copy.deepcopy(x[3]),copy.deepcopy(x1[0]),copy.deepcopy(x2[6])]
+    finalBid = 3
+    rand_int = random.randint(0,len(loaded_player3Cards)-1)
+    # rand_int = 3
+    playerTrump = loaded_player3Cards[rand_int]
+    loaded_player3Cards.remove(playerTrump)
+    playerCards = [loaded_player1Cards,loaded_player2Cards,loaded_player3Cards,loaded_player4Cards]
+    players = []
+
+
+
+    for i in range(4):
+                    player = {'cards':playerCards[i],'isTrump':i==(finalBid-1),'team':1 if i % 2 == 0 else 2, 'trump':playerTrump if i==(finalBid-1) else None}
+                    players.append(player)
+
+    trumpReveal = False
+    trumpSuit = playerTrump.suit
+    # currentSuit = "Clubs"
+    currentSuit = ""
+    chose = False
+    trumpPlayed = False
+    trumpIndice = [0,0,0,0]
+    reveal = -1
+    currentCatch = []
+    playerChance = 1
+
+
+    reward_distribution = []
+    minimax(s,True,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal)
+    # print(reward_distribution)
+    if j==0:
+        avg_rewards = np.array(reward_distribution)
+    else:
+        avg_rewards = np.array(reward_distribution)+avg_rewards
+
+
+
+# print("Loaded Player 1 Cards:")
+# printCards(x)
+# print("\n\n")
+# print("Loaded Player 2 Cards:")
+# printCards(x1)
+# print("\n\n")
+# print("Loaded Player 3 Cards:")
+# printCards(x2)
+# print("\n\n")
+# print("Loaded Player 4 Cards:")
+# printCards(x3)
+# print("\n\n")
+# print("Reward Distribution: Values")
+
+# printCards(x)
+print(avg_rewards/sample_size)
+
+
+    

@@ -1,0 +1,1 @@
+To build a bot that can play the card game 28 at a superhuman level.
