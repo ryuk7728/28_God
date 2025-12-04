@@ -32,29 +32,29 @@ class Cards:
 
         return pack
     
-    #Returns the same deck but the suit is only Hearts
-    @classmethod
-    def packOfSuit(cls):
+    # #Returns the same deck but the suit is only Hearts
+    # @classmethod
+    # def packOfSuit(cls):
         
-        pack = list([])
-        suits = ["Hearts","Hearts","Hearts","Hearts"]
-        ranks = ["Seven","Eight","Queen","King","Ten","Ace","Nine","Jack"]
-        order = 0
-        for suit in suits:
-            for rank in ranks:
-                point = 0
-                order = ranks.index(rank)
-                if rank == "Ten" or rank == "Ace":
-                    point = 1
-                if rank == "Nine":
-                    point = 2
-                if rank == "Jack":
-                    point = 3
+    #     pack = list([])
+    #     suits = ["Hearts","Hearts","Hearts","Hearts"]
+    #     ranks = ["Seven","Eight","Queen","King","Ten","Ace","Nine","Jack"]
+    #     order = 0
+    #     for suit in suits:
+    #         for rank in ranks:
+    #             point = 0
+    #             order = ranks.index(rank)
+    #             if rank == "Ten" or rank == "Ace":
+    #                 point = 1
+    #             if rank == "Nine":
+    #                 point = 2
+    #             if rank == "Jack":
+    #                 point = 3
 
-                card = cls(suit,rank,point,order)
-                pack.append(card)
+    #             card = cls(suit,rank,point,order)
+    #             pack.append(card)
 
-        return pack
+    #     return pack
 
 
 
