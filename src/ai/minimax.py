@@ -1,5 +1,5 @@
 import copy
-from cards import Cards
+from ..cards import Cards
 import random
 import numpy as np
 import pickle
@@ -193,7 +193,7 @@ def actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTru
                                         # playerTrump = None
                                         # trumpPlayed = True
                                         # trumpIndice[len(s)] = 1
-                                        validCards = [players[playerChance]['cards'][i] for i in trumpSuitInd] # Returning the currentsuit cards back in a list
+                                        validCards = [players[playerChance]['cards'][i] for i in trumpSuitInd] # Returning the trumpsuit cards back in a list
                                         return validCards                                        
 
                                     #Non trump calling player and he doesnt have trump cards
@@ -351,8 +351,11 @@ def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,cu
 # # Save the player card arrays to a file
 # save_player_cards(save_filename, player1Cards, player2Cards, player3Cards, player4Cards)
 
+
+
+
 # Later on (or in another program run) you can load the player card arrays back:
-save_filename = "player_cards.pkl"
+save_filename = r"C:\Users\ryuk7\Projects\RL428\data\player_cards.pkl"
 loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards = load_player_cards(save_filename)
 
 
@@ -509,7 +512,7 @@ for j in range(sample_size):
     trumpIndice = [0,0,0,0]
     reveal = -1
     currentCatch = []
-    playerChance = 1
+    playerChance = 0
 
 
     reward_distribution = []
