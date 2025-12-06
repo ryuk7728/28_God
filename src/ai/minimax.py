@@ -121,10 +121,14 @@ def checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,current
 def actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal=-1,playerChance=0):
     # Gets the updated player chance by using mod for reset
     playerChance=(playerChance+len(s))%4
+    if players[playerChance]['isTrump'] and not trumpReveal and len(players[playerChance]['cards'])==0 and not chose:
+          return [True]
     #First player in in the catchs' chance
     if  (chance(s)-1)==0:
         # Trump Call Player
         if players[playerChance]['isTrump']:
+                        if len(players[playerChance]['cards']==0) and not trumpReveal:
+                              players[playerChance]['cards'].append(playerTrump)
                         #If trump is already revealed or the player has all trumps, all cards are valid
                         if trumpReveal or allTrump(players[playerChance]['cards'],trumpSuit):
                             return (players[playerChance]['cards'])
@@ -249,7 +253,7 @@ def result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice
             return currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid
     # If action taken is choosing or not choosing to reveal trump
     else: 
-        if a and ((playerChance+len(s)+1)%4)!=finalBid: #If player chose to reveal trump and he isnt the trump player then the trump player adds the hidden trump to his cards
+        if (a and ((playerChance+len(s)+1)%4)!=finalBid): #If player chose to reveal trump and he isnt the trump player then the trump player adds the hidden trump to his cards
             players[finalBid-1]['cards'].append(playerTrump)
             playerTrump = None
         chose = True
@@ -500,7 +504,7 @@ for j in range(sample_size):
 
 
     for i in range(4):
-                    player = {'cards':playerCards[i],'isTrump':i==(finalBid-1),'team':1 if i % 2 == 0 else 2, 'trump':playerTrump if i==(finalBid-1) else None}
+                    player = {'cards':copy.deepcopy(playerCards[i]),'isTrump':i==(finalBid-1),'team':1 if i % 2 == 0 else 2, 'trump':playerTrump if i==(finalBid-1) else None}
                     players.append(player)
 
     trumpReveal = False

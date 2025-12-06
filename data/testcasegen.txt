@@ -1,0 +1,127 @@
+Initial State:
+
+P1 (Calls 15)
+
+J hearts
+A hearts (Trump)
+K hearts
+7 diamond
+T hearts
+Q hearts
+J diamond
+T diamond
+
+P2
+
+9 hearts
+T Clubs
+A Clubs
+T Spade
+J Clubs
+8 hearts
+7 hearts
+9 diamond
+
+
+P3
+
+K Spade
+8 Spade
+Q Spade
+7 Spade
+J Spade
+A Spade
+9 Spade
+Q Clubs
+
+
+P4
+
+8 Diamond
+K Clubs
+8 Clubs
+K Diamond
+A Diamond
+Q Diamond
+9 Clubs
+7 Clubs
+
+TEMPLATE:
+
+P1:<Card>
+P2: 
+P3:
+P4:
+
+
+CATCH 1:
+
+P1: J diamond
+P2: 9 diamond
+P3: J spade
+P4: 8 diamond
+
+P1 wins 
+
+CATCH 2:
+
+P1: 7 diamond
+P2: 8 hearts (Calls Trump) T
+P3: 8 spade
+P4: A diamond
+
+P2 wins
+
+CATCH 3:
+
+P2: J Clubs
+P3: Q Clubs
+P4: K Clubs
+P1: A hearts T
+
+P1 wins
+
+CATCH 4:
+
+P1: J hearts T
+P2: 7 hearts T
+P3: 9 spade 
+P4: 7 Clubs
+
+P1 Wins!
+
+CATCH 5:
+
+P1: Q hearts T
+P2: 9 hearts T
+P3: 7 spade 
+P4: 9 Clubs
+
+P2 wins!
+
+CATCH 6:
+
+P2: T spade 
+P3: Q spade
+P4: Q diamond
+P1: K hearts T
+
+P1 Wins!
+
+CATCH 7:
+
+P1: T Diamond
+P2: T Clubs
+P3: A Spade
+P4: K Diamond
+
+P1 Wins!
+
+CATCH 8:
+
+P1: T hearts T
+P2: A Clubs
+P3: K Spade
+P4: 8 Clubs
+
+P1 Wins!
