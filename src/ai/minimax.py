@@ -127,7 +127,7 @@ def actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTru
     if  (chance(s)-1)==0:
         # Trump Call Player
         if players[playerChance]['isTrump']:
-                        if len(players[playerChance]['cards']==0) and not trumpReveal:
+                        if len(players[playerChance]['cards'])==0 and not trumpReveal:
                               players[playerChance]['cards'].append(playerTrump)
                         #If trump is already revealed or the player has all trumps, all cards are valid
                         if trumpReveal or allTrump(players[playerChance]['cards'],trumpSuit):
@@ -262,8 +262,8 @@ def result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice
 
                         
 
-reward_distribution = []
-def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal):
+# reward_distribution = []
+def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution):
       
       if checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)!=-100:
             return checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)
@@ -283,7 +283,7 @@ def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,cu
                 players_copy = copy.deepcopy(players)
                
                 currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-                newtake = minimax(s,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal)
+                newtake = minimax(s,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution)
                 value = max(value,newtake)
                 
                 s = s_copy
@@ -312,7 +312,7 @@ def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,cu
                 players_copy1 = copy.deepcopy(players)
                 
                 currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-                newtake = minimax(s,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal)
+                newtake = minimax(s,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution)
                 value = min(value,newtake)
 
 
@@ -359,15 +359,15 @@ def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,cu
 
 
 # Later on (or in another program run) you can load the player card arrays back:
-save_filename = r"C:\Users\ryuk7\Projects\RL428\data\player_cards.pkl"
-loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards = load_player_cards(save_filename)
+# save_filename = r"C:\Users\ryuk7\Projects\RL428\data\player_cards.pkl"
+# loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards = load_player_cards(save_filename)
 
 
 
-x = copy.deepcopy(loaded_player1Cards)
-x1 = copy.deepcopy(loaded_player2Cards)
-x2 = copy.deepcopy(loaded_player3Cards)
-x3 = copy.deepcopy(loaded_player4Cards)
+# x = copy.deepcopy(loaded_player1Cards)
+# x1 = copy.deepcopy(loaded_player2Cards)
+# x2 = copy.deepcopy(loaded_player3Cards)
+# x3 = copy.deepcopy(loaded_player4Cards)
 
 # avg_rewards = np.array([0,0,0,0,0,0,0,0])
 # remainingCards = loaded_player2Cards+loaded_player3Cards+loaded_player4Cards
@@ -383,10 +383,10 @@ x3 = copy.deepcopy(loaded_player4Cards)
 # loaded_player4Cards.remove(loaded_player4Cards[1])
 # loaded_player4Cards.remove(loaded_player4Cards[4])
 # loaded_player4Cards.remove(loaded_player4Cards[0])
-lset = copy.deepcopy(loaded_player1Cards)
-lset2 = copy.deepcopy(loaded_player2Cards)
-lset3 = copy.deepcopy(loaded_player3Cards)
-lset4 = copy.deepcopy(loaded_player4Cards)
+# lset = copy.deepcopy(loaded_player1Cards)
+# lset2 = copy.deepcopy(loaded_player2Cards)
+# lset3 = copy.deepcopy(loaded_player3Cards)
+# lset4 = copy.deepcopy(loaded_player4Cards)
 # printCards(loaded_player2Cards)
 # print("\n")
 # printCards(loaded_player2Cards)
@@ -394,8 +394,8 @@ lset4 = copy.deepcopy(loaded_player4Cards)
 # printCards(loaded_player3Cards)
 # print("\n")
 # printCards(loaded_player4Cards)
-remainingCards = loaded_player2Cards+loaded_player3Cards+loaded_player4Cards
-sample_size = 500
+# remainingCards = loaded_player2Cards+loaded_player3Cards+loaded_player4Cards
+# sample_size = 0
 # ranks = ["Seven","Eight","Queen","King","Ten","Ace","Nine","Jack"]
 
 # # Create cards for Player 1
@@ -437,95 +437,95 @@ sample_size = 500
 #     Cards("Clubs", "King", 0, ranks.index("King")),
 #     Cards("Hearts", "Ace", 1, ranks.index("Ace"))
 # ]
-print("Player 1:")
-printCards(loaded_player1Cards)
-print("\nPlayer 2:")
-printCards(loaded_player2Cards)
-print("\nPlayer 3:")
-printCards(loaded_player3Cards)
-print("\nPlayer 4:")
-printCards(loaded_player4Cards)
-for j in range(sample_size):
-    print(j)
-    random.shuffle(remainingCards)
-    # print(len(remainingCards))
-    # loaded_player1Cards = copy.deepcopy(nloaded_player1Cards)
-    # loaded_player2Cards = copy.deepcopy(nloaded_player2Cards)
-    # loaded_player3Cards = copy.deepcopy(nloaded_player3Cards)
-    # loaded_player4Cards = copy.deepcopy(nloaded_player4Cards)
-    # loaded_player1Cards = copy.deepcopy(remainingCards[0:5])
-    loaded_player2Cards = copy.deepcopy(remainingCards[0:8])
-    loaded_player3Cards = copy.deepcopy(remainingCards[8:16])
-    loaded_player4Cards = copy.deepcopy(remainingCards[16:24])
-    # print("Player 1:")
-    # printCards(loaded_player1Cards)
-    # print("\nPlayer 2:")
-    # printCards(loaded_player2Cards)
-    # print("\nPlayer 3:")
-    # printCards(loaded_player3Cards)
-    # print("\nPlayer 4:")
-    # printCards(loaded_player4Cards)
-    # print("P1:")
-    # printCards(loaded_player1Cards)
-    # print("\n")
-    # print("P2:")
-    # print("\n")
-    # printCards(loaded_player2Cards)
-    # print("P3:")
-    # print("\n")
-    # printCards(loaded_player3Cards)
-    # print("P4:")
-    # print("\n")
-    # printCards(loaded_player4Cards)
-    # loaded_player1Cards = copy.deepcopy(x)
-    # loaded_player2Cards = copy.deepcopy(x1)
-    # loaded_player3Cards = copy.deepcopy(x2)
-    # loaded_player4Cards = copy.deepcopy(x3)
+# print("Player 1:")
+# printCards(loaded_player1Cards)
+# print("\nPlayer 2:")
+# printCards(loaded_player2Cards)
+# print("\nPlayer 3:")
+# printCards(loaded_player3Cards)
+# print("\nPlayer 4:")
+# printCards(loaded_player4Cards)
+# for j in range(sample_size):
+#     print(j)
+#     random.shuffle(remainingCards)
+#     # print(len(remainingCards))
+#     # loaded_player1Cards = copy.deepcopy(nloaded_player1Cards)
+#     # loaded_player2Cards = copy.deepcopy(nloaded_player2Cards)
+#     # loaded_player3Cards = copy.deepcopy(nloaded_player3Cards)
+#     # loaded_player4Cards = copy.deepcopy(nloaded_player4Cards)
+#     # loaded_player1Cards = copy.deepcopy(remainingCards[0:5])
+#     loaded_player2Cards = copy.deepcopy(remainingCards[0:8])
+#     loaded_player3Cards = copy.deepcopy(remainingCards[8:16])
+#     loaded_player4Cards = copy.deepcopy(remainingCards[16:24])
+#     # print("Player 1:")
+#     # printCards(loaded_player1Cards)
+#     # print("\nPlayer 2:")
+#     # printCards(loaded_player2Cards)
+#     # print("\nPlayer 3:")
+#     # printCards(loaded_player3Cards)
+#     # print("\nPlayer 4:")
+#     # printCards(loaded_player4Cards)
+#     # print("P1:")
+#     # printCards(loaded_player1Cards)
+#     # print("\n")
+#     # print("P2:")
+#     # print("\n")
+#     # printCards(loaded_player2Cards)
+#     # print("P3:")
+#     # print("\n")
+#     # printCards(loaded_player3Cards)
+#     # print("P4:")
+#     # print("\n")
+#     # printCards(loaded_player4Cards)
+#     # loaded_player1Cards = copy.deepcopy(x)
+#     # loaded_player2Cards = copy.deepcopy(x1)
+#     # loaded_player3Cards = copy.deepcopy(x2)
+#     # loaded_player4Cards = copy.deepcopy(x3)
 
-    # print("\nLoaded Player 1 Cards:")
-    # printCards(loaded_player1Cards)
-    # print("\nLoaded Player 2 Cards:")
-    # printCards(loaded_player2Cards)
-    # print("\nLoaded Player 3 Cards:")
-    # printCards(loaded_player3Cards)
-    # print("\nLoaded Player 4 Cards:")
-    # printCards(loaded_player4Cards)
+#     # print("\nLoaded Player 1 Cards:")
+#     # printCards(loaded_player1Cards)
+#     # print("\nLoaded Player 2 Cards:")
+#     # printCards(loaded_player2Cards)
+#     # print("\nLoaded Player 3 Cards:")
+#     # printCards(loaded_player3Cards)
+#     # print("\nLoaded Player 4 Cards:")
+#     # printCards(loaded_player4Cards)
 
-    s = []
-    # s = [copy.deepcopy(x[3]),copy.deepcopy(x1[0]),copy.deepcopy(x2[6])]
-    finalBid = 3
-    rand_int = random.randint(0,len(loaded_player3Cards)-1)
-    # rand_int = 3
-    playerTrump = loaded_player3Cards[rand_int]
-    loaded_player3Cards.remove(playerTrump)
-    playerCards = [loaded_player1Cards,loaded_player2Cards,loaded_player3Cards,loaded_player4Cards]
-    players = []
-
-
-
-    for i in range(4):
-                    player = {'cards':copy.deepcopy(playerCards[i]),'isTrump':i==(finalBid-1),'team':1 if i % 2 == 0 else 2, 'trump':playerTrump if i==(finalBid-1) else None}
-                    players.append(player)
-
-    trumpReveal = False
-    trumpSuit = playerTrump.suit
-    # currentSuit = "Clubs"
-    currentSuit = ""
-    chose = False
-    trumpPlayed = False
-    trumpIndice = [0,0,0,0]
-    reveal = -1
-    currentCatch = []
-    playerChance = 0
+#     s = []
+#     # s = [copy.deepcopy(x[3]),copy.deepcopy(x1[0]),copy.deepcopy(x2[6])]
+#     finalBid = 3
+#     rand_int = random.randint(0,len(loaded_player3Cards)-1)
+#     # rand_int = 3
+#     playerTrump = loaded_player3Cards[rand_int]
+#     loaded_player3Cards.remove(playerTrump)
+#     playerCards = [loaded_player1Cards,loaded_player2Cards,loaded_player3Cards,loaded_player4Cards]
+#     players = []
 
 
-    reward_distribution = []
-    minimax(s,True,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal)
-    # print(reward_distribution)
-    if j==0:
-        avg_rewards = np.array(reward_distribution)
-    else:
-        avg_rewards = np.array(reward_distribution)+avg_rewards
+
+    # for i in range(4):
+    #                 player = {'cards':copy.deepcopy(playerCards[i]),'isTrump':i==(finalBid-1),'team':1 if i % 2 == 0 else 2, 'trump':playerTrump if i==(finalBid-1) else None}
+    #                 players.append(player)
+
+#     trumpReveal = False
+#     trumpSuit = playerTrump.suit
+#     # currentSuit = "Clubs"
+#     currentSuit = ""
+#     chose = False
+#     trumpPlayed = False
+#     trumpIndice = [0,0,0,0]
+#     reveal = -1
+#     currentCatch = []
+#     playerChance = 0
+
+
+#     reward_distribution = []
+    # minimax(s,True,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal)
+#     # print(reward_distribution)
+#     if j==0:
+#         avg_rewards = np.array(reward_distribution)
+#     else:
+#         avg_rewards = np.array(reward_distribution)+avg_rewards
 
 
 
@@ -544,7 +544,7 @@ for j in range(sample_size):
 # print("Reward Distribution: Values")
 
 # printCards(x)
-print(avg_rewards/sample_size)
+# print(avg_rewards/sample_size)
 
 
     

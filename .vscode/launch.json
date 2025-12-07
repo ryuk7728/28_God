@@ -7,6 +7,13 @@
             "request": "launch",
             "module": "src.ai.minimax",
             "justMyCode": true
+        },
+        {
+            "name": "Debug test_minimax",
+            "type": "python",
+            "request": "launch",
+            "module": "tests.test_minimax",
+            "justMyCode": true
         }
     ]
 }
