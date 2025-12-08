@@ -263,73 +263,89 @@ def result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice
                         
 
 # reward_distribution = []
-def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution):
+def minimax(s_in,first_in,trumpPlayed_in,currentCatch_in,trumpIndice_in,playerChance_in,players_in,currentSuit_in,trumpReveal_in,trumpSuit_in,chose_in,finalBid_in,playerTrump_in,reveal_in,reward_distribution):
+    s = copy.deepcopy(s_in)
+    first = copy.deepcopy(first_in)
+    currentCatch = copy.deepcopy(currentCatch_in)
+    playerChance = copy.deepcopy(playerChance_in)
+    currentSuit = copy.deepcopy(currentSuit_in)
+    trumpReveal = copy.deepcopy(trumpReveal_in)
+    chose = copy.deepcopy(chose_in)
+    playerTrump = copy.deepcopy(playerTrump_in)
+    trumpPlayed = copy.deepcopy(trumpPlayed_in)
+    trumpIndice = copy.deepcopy(trumpIndice_in)
+    players = copy.deepcopy(players_in)
+    trumpSuit = copy.deepcopy(trumpSuit_in)
+    finalBid = copy.deepcopy(finalBid_in)
+    reveal = copy.deepcopy(reveal_in)
       
-      if checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)!=-100:
-            return checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)
-      
-      if (playerChance+chance(s))%2!=0:
-          value = -1000
-          act = copy.deepcopy(actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance))
-          chose = False
-          for a in act:
-                s_copy = copy.deepcopy(s)
-                currentSuit_copy = copy.deepcopy(currentSuit)
-                trumpReveal_copy = copy.deepcopy(trumpReveal)
-                chose_copy = copy.deepcopy(chose) 
-                playerTrump_copy = copy.deepcopy(playerTrump)
-                trumpPlayed_copy = copy.deepcopy(trumpPlayed)
-                trumpIndice_copy = copy.deepcopy(trumpIndice)
-                players_copy = copy.deepcopy(players)
-               
-                currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-                newtake = minimax(s,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution)
-                value = max(value,newtake)
-                
-                s = s_copy
-                currentSuit = currentSuit_copy
-                trumpReveal = trumpReveal_copy
-                chose = chose_copy
-                playerTrump = playerTrump_copy
-                trumpPlayed = trumpPlayed_copy
-                trumpIndice = trumpIndice_copy
-                players = players_copy
-                
-                if first:
-                    reward_distribution.append(newtake)
-      else:
-          value = 1000
-          act1 =  copy.deepcopy(actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance)) 
-          chose = False
-          for a in act1:
-                s_copy1 = copy.deepcopy(s)
-                currentSuit_copy1 = copy.deepcopy(currentSuit)
-                trumpReveal_copy1 = copy.deepcopy(trumpReveal)
-                chose_copy1 = copy.deepcopy(chose)
-                playerTrump_copy1 = copy.deepcopy(playerTrump)
-                trumpPlayed_copy1 = copy.deepcopy(trumpPlayed)
-                trumpIndice_copy1 = copy.deepcopy(trumpIndice)
-                players_copy1 = copy.deepcopy(players)
-                
-                currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-                newtake = minimax(s,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution)
-                value = min(value,newtake)
 
 
-                s = s_copy1
-                currentSuit = currentSuit_copy1
-                trumpReveal = trumpReveal_copy1
-                chose = chose_copy1
-                playerTrump = playerTrump_copy1
-                trumpPlayed = trumpPlayed_copy1
-                trumpIndice = trumpIndice_copy1
-                players = players_copy1
-                
-                if first:
-                    reward_distribution.append(newtake)
-                
-      
-      return value
+    if checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)!=-100:
+        return checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)
+    
+    if (playerChance+chance(s))%2!=0:
+        value = -1000
+        act = copy.deepcopy(actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance))
+        chose = False
+        for a in act:
+            s_copy = copy.deepcopy(s)
+            currentSuit_copy = copy.deepcopy(currentSuit)
+            trumpReveal_copy = copy.deepcopy(trumpReveal)
+            chose_copy = copy.deepcopy(chose) 
+            playerTrump_copy = copy.deepcopy(playerTrump)
+            trumpPlayed_copy = copy.deepcopy(trumpPlayed)
+            trumpIndice_copy = copy.deepcopy(trumpIndice)
+            players_copy = copy.deepcopy(players)
+            
+            currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+            newtake = minimax(s,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution)
+            value = max(value,newtake)
+            
+            s = s_copy
+            currentSuit = currentSuit_copy
+            trumpReveal = trumpReveal_copy
+            chose = chose_copy
+            playerTrump = playerTrump_copy
+            trumpPlayed = trumpPlayed_copy
+            trumpIndice = trumpIndice_copy
+            players = players_copy
+            
+            if first:
+                reward_distribution.append(newtake)
+    else:
+        value = 1000
+        act1 =  copy.deepcopy(actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance)) 
+        chose = False
+        for a in act1:
+            s_copy1 = copy.deepcopy(s)
+            currentSuit_copy1 = copy.deepcopy(currentSuit)
+            trumpReveal_copy1 = copy.deepcopy(trumpReveal)
+            chose_copy1 = copy.deepcopy(chose)
+            playerTrump_copy1 = copy.deepcopy(playerTrump)
+            trumpPlayed_copy1 = copy.deepcopy(trumpPlayed)
+            trumpIndice_copy1 = copy.deepcopy(trumpIndice)
+            players_copy1 = copy.deepcopy(players)
+            
+            currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+            newtake = minimax(s,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution)
+            value = min(value,newtake)
+
+
+            s = s_copy1
+            currentSuit = currentSuit_copy1
+            trumpReveal = trumpReveal_copy1
+            chose = chose_copy1
+            playerTrump = playerTrump_copy1
+            trumpPlayed = trumpPlayed_copy1
+            trumpIndice = trumpIndice_copy1
+            players = players_copy1
+            
+            if first:
+                reward_distribution.append(newtake)
+            
+    
+    return value
             
 
 
