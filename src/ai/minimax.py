@@ -127,7 +127,7 @@ def actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTru
     if  (chance(s)-1)==0:
         # Trump Call Player
         if players[playerChance]['isTrump']:
-                        if len(players[playerChance]['cards'])==0 and not trumpReveal:
+                        if len(players[playerChance]['cards'])==0 and trumpReveal and playerTrump is not None:
                               players[playerChance]['cards'].append(playerTrump)
                         #If trump is already revealed or the player has all trumps, all cards are valid
                         if trumpReveal or allTrump(players[playerChance]['cards'],trumpSuit):
@@ -240,17 +240,16 @@ def result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice
         # If its the first card played
         if len(s)==1: 
             currentSuit = a.suit
-            return currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid
+            # return currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid
         #If its 2nd onward card played
-        else: 
-            if trumpReveal and a.suit==trumpSuit:
-                trumpPlayed = True
-                trumpIndice[len(s)-1] = 1
+        if trumpReveal and a.suit==trumpSuit:
+            trumpPlayed = True
+            trumpIndice[len(s)-1] = 1
 
-            if a==playerTrump:
-                playerTrump = None
+        if a==playerTrump:
+            playerTrump = None
 
-            return currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid
+        return currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid
     # If action taken is choosing or not choosing to reveal trump
     else: 
         if (a and ((playerChance+len(s)+1)%4)!=finalBid): #If player chose to reveal trump and he isnt the trump player then the trump player adds the hidden trump to his cards
