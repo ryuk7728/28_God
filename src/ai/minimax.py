@@ -4,6 +4,7 @@ import random
 import numpy as np
 import pickle
 import math
+import time
 
 #Checks if all the cards is from the suit specified
 def allTrump(cards,suit):
@@ -60,6 +61,71 @@ def printCards(cards):
 #Returns which players chance it is by adding 1 to the length of the state, for example if the state list is length 0 then its Player 1's chance
 def chance(s):
     return (len(s)+1)
+
+def reset(currentSuit,s,trumpPlayed,trumpIndice,chose):
+       currentSuit = ""
+       s = []
+       trumpPlayed = False
+       trumpIndice = [0,0,0,0]
+       chose = False
+       return currentSuit,s,trumpPlayed,trumpIndice,chose
+
+#Takes the state of the game and returns the points of the winning team, positive if team1 and negative if team2
+def checkwin_extended(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit):
+    currentCatch = s
+    if len(s)==4:
+            maxIndex = 0 # Used to determine which players chance is next
+            if trumpPlayed: #If the trump card is played somewhere in the catch
+                maxOrder = -1 # Finds which trump is the highest 
+                count = 0 # count variable which accounts for index
+                points = 0 #Accumulates points
+
+                for card in currentCatch:
+                    
+                    points += card.points
+                    if trumpIndice[count] == 1: # trumpIndice has the indices at which trump was played Eg. [0,1,0,0]
+                        if card.order > maxOrder:
+                            maxOrder = card.order 
+                            maxIndex = count
+                    count+=1
+
+                maxIndex = (playerChance+maxIndex)%4 # Does initial player + maxIndex(how many places away from initial player) mod 4 to get the highest player
+                # print("The catch is: ")
+                # printCards(s)
+                # print("\n")
+                # print(f"Player {maxIndex+1} played the highest card, the catch goes to team {players[maxIndex]['team']} getting {points} points")
+                if players[maxIndex]['team'] == 1:
+                    return [maxIndex,points]
+                else:
+                    return [maxIndex,-1*points]
+            else:
+                # This part of the code explores the case where trump wasnt played
+                maxOrder = -1 # Same as earlier
+                count = 0
+                points = 0
+
+                #Easily understandable- it iterates through all cards to find highest card of the starting suit
+                for card in currentCatch:
+                    
+                    points += card.points
+                    if card.suit == currentSuit:
+                        if card.order > maxOrder:
+                            maxOrder = card.order
+                            maxIndex = count
+                    count+=1
+                
+
+                maxIndex = (playerChance+maxIndex)%4 #inital player + maxIndex(how many places away from initial player) mod 4 to get the highest player
+                # print("The catch is: ")
+                # printCards(s)
+                # print("\n")
+                # print(f"Player {maxIndex+1} played the highest card, the catch goes to team {players[maxIndex]['team']} getting {points} points")
+                if players[maxIndex]['team'] == 1:
+                    return [maxIndex,points]
+                else:
+                    return [maxIndex,-1*points]
+    else:
+        return [0,-100]
 
 #Takes the state of the game and returns the points of the winning team, positive if team1 and negative if team2
 def checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit):
@@ -269,8 +335,6 @@ def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,cu
         trumpIndice = copy.deepcopy(trumpIndice)
         players = copy.deepcopy(players)
       
-
-
     if checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)!=-100:
         return checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)
     
@@ -302,7 +366,10 @@ def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,cu
             players = players_copy
             
             if first:
-                reward_distribution.append((a.identity(),newtake))
+                if isinstance(a, bool):
+                     reward_distribution.append((a,newtake))
+                else:
+                     reward_distribution.append((a.identity(),newtake))
     else:
         value = 1000
         act1 =  copy.deepcopy(actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance)) 
@@ -330,9 +397,12 @@ def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,cu
             trumpPlayed = trumpPlayed_copy1
             trumpIndice = trumpIndice_copy1
             players = players_copy1
-            
+
             if first:
-                reward_distribution.append((a.identity(),newtake))
+                if isinstance(a, bool):
+                     reward_distribution.append((a,newtake))
+                else:
+                     reward_distribution.append((a.identity(),newtake))
             
     
     return value
@@ -344,9 +414,11 @@ def minimax_alpha(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,play
         s = copy.deepcopy(s)
         trumpIndice = copy.deepcopy(trumpIndice)
         players = copy.deepcopy(players)
+    
+    chk = checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)
 
-    if checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)!=-100:
-        return checkwin(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)
+    if chk!=-100:
+        return chk
     
     if (playerChance+chance(s))%2!=0:
         value = -math.inf
@@ -376,8 +448,12 @@ def minimax_alpha(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,play
             trumpIndice = trumpIndice_copy
             players = players_copy
             
-            if first:
-                reward_distribution.append((a.identity(),newtake))
+            if first and (len(reward_distribution)==0 or newtake>reward_distribution[0][1]):
+                reward_distribution.clear()
+                if isinstance(a, bool):
+                     reward_distribution.append((a,newtake))
+                else:
+                     reward_distribution.append((a.identity(),newtake))
 
             if alpha>=beta:
                 break
@@ -411,12 +487,117 @@ def minimax_alpha(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,play
             players = players_copy1
 
             
-            if first:
-                reward_distribution.append((a.identity(),newtake))
+            if first and (len(reward_distribution)==0 or newtake<reward_distribution[0][1]):
+                reward_distribution.clear()
+                if isinstance(a, bool):
+                     reward_distribution.append((a,newtake))
+                else:
+                     reward_distribution.append((a.identity(),newtake))
 
             if alpha>=beta:
                 break
             
+    return value
+
+
+def minimax_extended(s,first,secondary,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,alpha=-math.inf,beta=math.inf):
+    if secondary:
+        s = copy.deepcopy(s)
+        trumpIndice = copy.deepcopy(trumpIndice)
+        players = copy.deepcopy(players)
+    
+    chk = checkwin_extended(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)
+
+    if chk[1]!=-100:
+         total+=chk[1]
+         num+=1
+         currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
+         playerChance = chk[0]
+         if num<k:
+            return minimax_extended(s,False,True,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,alpha=-math.inf,beta=math.inf)
+         else:
+            return total
+         
+
+    
+    if (playerChance+chance(s))%2!=0:
+        value = -math.inf
+        act = copy.deepcopy(actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance))
+        chose = False
+        for a in act:
+            s_copy = copy.deepcopy(s)
+            currentSuit_copy = copy.deepcopy(currentSuit)
+            trumpReveal_copy = copy.deepcopy(trumpReveal)
+            chose_copy = copy.deepcopy(chose) 
+            playerTrump_copy = copy.deepcopy(playerTrump)
+            trumpPlayed_copy = copy.deepcopy(trumpPlayed)
+            trumpIndice_copy = copy.deepcopy(trumpIndice)
+            players_copy = copy.deepcopy(players)
+            
+            currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+            newtake = minimax_extended(s,False,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,alpha=-math.inf,beta=math.inf)
+            value = max(value,newtake)
+            alpha = max(alpha,value)
+            
+            s = s_copy
+            currentSuit = currentSuit_copy
+            trumpReveal = trumpReveal_copy
+            chose = chose_copy
+            playerTrump = playerTrump_copy
+            trumpPlayed = trumpPlayed_copy
+            trumpIndice = trumpIndice_copy
+            players = players_copy
+            
+            if first and (len(reward_distribution)==0 or newtake>reward_distribution[0][1]):
+                reward_distribution.clear()
+                if isinstance(a, bool):
+                     reward_distribution.append((a,newtake))
+                else:
+                     reward_distribution.append((a.identity(),newtake))
+
+            if alpha>=beta:
+                break
+    else:
+        value = math.inf
+        act1 =  copy.deepcopy(actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance)) 
+        chose = False
+        for a in act1:
+            s_copy1 = copy.deepcopy(s)
+            currentSuit_copy1 = copy.deepcopy(currentSuit)
+            trumpReveal_copy1 = copy.deepcopy(trumpReveal)
+            chose_copy1 = copy.deepcopy(chose)
+            playerTrump_copy1 = copy.deepcopy(playerTrump)
+            trumpPlayed_copy1 = copy.deepcopy(trumpPlayed)
+            trumpIndice_copy1 = copy.deepcopy(trumpIndice)
+            players_copy1 = copy.deepcopy(players)
+            
+            currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+            newtake = minimax_extended(s,False,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,alpha=-math.inf,beta=math.inf)
+            value = min(value,newtake)
+            beta = min(beta,value)
+
+
+            s = s_copy1
+            currentSuit = currentSuit_copy1
+            trumpReveal = trumpReveal_copy1
+            chose = chose_copy1
+            playerTrump = playerTrump_copy1
+            trumpPlayed = trumpPlayed_copy1
+            trumpIndice = trumpIndice_copy1
+            players = players_copy1
+
+            
+            if first and (len(reward_distribution)==0 or newtake<reward_distribution[0][1]):
+                reward_distribution.clear()
+                if isinstance(a, bool):
+                     reward_distribution.append((a,newtake))
+                else:
+                     reward_distribution.append((a.identity(),newtake))
+
+            if alpha>=beta:
+                break
+    print(leaf_count)
+    leaf_count+=1
     return value
             
 

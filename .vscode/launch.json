@@ -14,6 +14,13 @@
             "request": "launch",
             "module": "tests.test_minimax",
             "justMyCode": true
+        },
+        {
+            "name": "Debug test_extended",
+            "type": "python",
+            "request": "launch",
+            "module": "tests.test_extended",
+            "justMyCode": true
         }
     ]
 }
