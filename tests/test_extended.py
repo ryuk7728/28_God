@@ -29,26 +29,26 @@ def printCards(cards):
                 print(card.identity())
 
 
-def test_minimax_game1():
-    loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards = get_game1()
-    finalBid = 1
-    playerTrump = loaded_player1Cards.pop(1)
-    players = create_dictionary(loaded_player1Cards,loaded_player2Cards,loaded_player3Cards,loaded_player4Cards,finalBid,playerTrump)
-    trumpReveal = False
-    trumpSuit = playerTrump.suit
-    currentSuit = ""
-    chose = False
-    trumpPlayed = False
-    trumpIndice = [0,0,0,0]
-    reveal = -1
-    currentCatch = []
-    playerChance = 0
-    reward_distribution = []
-    s = []
-    total = 0
-    num = 0
-    k = 2
-    minimax_extended(s,True,True,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,-math.inf,math.inf)
-    print("Done")
+# def test_minimax_game1():
+#     loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards = get_game1()
+#     finalBid = 1
+#     playerTrump = loaded_player1Cards.pop(1)
+#     players = create_dictionary(loaded_player1Cards,loaded_player2Cards,loaded_player3Cards,loaded_player4Cards,finalBid,playerTrump)
+#     trumpReveal = False
+#     trumpSuit = playerTrump.suit
+#     currentSuit = ""
+#     chose = False
+#     trumpPlayed = False
+#     trumpIndice = [0,0,0,0]
+#     reveal = -1
+#     currentCatch = []
+#     playerChance = 0
+#     reward_distribution = []
+#     s = []
+#     total = 0
+#     num = 0
+#     k = 2
+#     minimax_extended(s,True,True,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,-math.inf,math.inf)
+#     print("Done")
 
-test_minimax_game1()
+# test_minimax_game1()
