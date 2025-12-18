@@ -246,6 +246,9 @@ def test_minimax_special_case1_og():
     print("REWARD DISTRIBUTION:",reward_distribution)
     assert reward_distribution == [5]
 
+test_minimax_special_case1_og()
+
+
 
 def test_minimax_special_case2_og():
     loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards = get_special_case2()
@@ -480,7 +483,7 @@ def test_minimax_game2_og():
     minimax(s,True,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution)
     assert reward_distribution == [-7]
 
-# test_minimax_game1_og()
+test_minimax_game1_og()
 
 
 

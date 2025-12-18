@@ -339,6 +339,8 @@ def result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice
         if a==playerTrump:
             playerTrump = None
 
+        chose = False
+
         return currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,undo_info
     
     # If action taken is choosing or not choosing to reveal trump
@@ -349,6 +351,8 @@ def result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice
             players[finalBid-1]['cards'].append(playerTrump)
             undo_info['trump_added_to_player'] = finalBid-1
             playerTrump = None
+        elif a:
+             undo_info['trump_added_to_player'] = finalBid-1
             
         chose = True
         trumpReveal = a
@@ -396,73 +400,73 @@ def undo_result(s, undo_info, currentSuit, trumpReveal, chose, playerTrump, trum
 
 
 # Helper function to capture state snapshot
-# def capture_state_snapshot(s, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players):
-#     """Captures a snapshot of the current state for validation"""
-#     snapshot = {
-#         's_len': len(s),
-#         's_cards': [card.identity() for card in s],
-#         'currentSuit': currentSuit,
-#         'trumpReveal': trumpReveal,
-#         'chose': chose,
-#         'playerTrump': playerTrump.identity() if playerTrump is not None else None,
-#         'trumpPlayed': trumpPlayed,
-#         'trumpIndice': trumpIndice[:],  # Copy the list
-#         'players_cards': []
-#     }
+def capture_state_snapshot(s, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players):
+    """Captures a snapshot of the current state for validation"""
+    snapshot = {
+        's_len': len(s),
+        's_cards': [card.identity() for card in s],
+        'currentSuit': currentSuit,
+        'trumpReveal': trumpReveal,
+        'chose': chose,
+        'playerTrump': playerTrump.identity() if playerTrump is not None else None,
+        'trumpPlayed': trumpPlayed,
+        'trumpIndice': trumpIndice[:],  # Copy the list
+        'players_cards': []
+    }
     
-#     # Capture each player's cards
-#     for i in range(4):
-#         snapshot['players_cards'].append([card.identity() for card in players[i]['cards']])
+    # Capture each player's cards
+    for i in range(4):
+        snapshot['players_cards'].append([card.identity() for card in players[i]['cards']])
     
-#     return snapshot
+    return snapshot
 
 
-# # Helper function to validate state after undo
-# def validate_state_restoration(snapshot, s, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players):
-#     """Validates that the state matches the snapshot"""
-#     errors = []
+# Helper function to validate state after undo
+def validate_state_restoration(snapshot, s, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players):
+    """Validates that the state matches the snapshot"""
+    errors = []
     
-#     # Check s length
-#     if len(s) != snapshot['s_len']:
-#         errors.append(f"s length mismatch: expected {snapshot['s_len']}, got {len(s)}")
+    # Check s length
+    if len(s) != snapshot['s_len']:
+        errors.append(f"s length mismatch: expected {snapshot['s_len']}, got {len(s)}")
     
-#     # Check s cards
-#     s_cards_now = [card.identity() for card in s]
-#     if s_cards_now != snapshot['s_cards']:
-#         errors.append(f"s cards mismatch: expected {snapshot['s_cards']}, got {s_cards_now}")
+    # Check s cards
+    s_cards_now = [card.identity() for card in s]
+    if s_cards_now != snapshot['s_cards']:
+        errors.append(f"s cards mismatch: expected {snapshot['s_cards']}, got {s_cards_now}")
     
-#     # Check currentSuit
-#     if currentSuit != snapshot['currentSuit']:
-#         errors.append(f"currentSuit mismatch: expected '{snapshot['currentSuit']}', got '{currentSuit}'")
+    # Check currentSuit
+    if currentSuit != snapshot['currentSuit']:
+        errors.append(f"currentSuit mismatch: expected '{snapshot['currentSuit']}', got '{currentSuit}'")
     
-#     # Check trumpReveal
-#     if trumpReveal != snapshot['trumpReveal']:
-#         errors.append(f"trumpReveal mismatch: expected {snapshot['trumpReveal']}, got {trumpReveal}")
+    # Check trumpReveal
+    if trumpReveal != snapshot['trumpReveal']:
+        errors.append(f"trumpReveal mismatch: expected {snapshot['trumpReveal']}, got {trumpReveal}")
     
-#     # Check chose
-#     if chose != snapshot['chose']:
-#         errors.append(f"chose mismatch: expected {snapshot['chose']}, got {chose}")
+    # Check chose
+    if chose != snapshot['chose']:
+        errors.append(f"chose mismatch: expected {snapshot['chose']}, got {chose}")
     
-#     # Check playerTrump
-#     playerTrump_now = playerTrump.identity() if playerTrump is not None else None
-#     if playerTrump_now != snapshot['playerTrump']:
-#         errors.append(f"playerTrump mismatch: expected {snapshot['playerTrump']}, got {playerTrump_now}")
+    # Check playerTrump
+    playerTrump_now = playerTrump.identity() if playerTrump is not None else None
+    if playerTrump_now != snapshot['playerTrump']:
+        errors.append(f"playerTrump mismatch: expected {snapshot['playerTrump']}, got {playerTrump_now}")
     
-#     # Check trumpPlayed
-#     if trumpPlayed != snapshot['trumpPlayed']:
-#         errors.append(f"trumpPlayed mismatch: expected {snapshot['trumpPlayed']}, got {trumpPlayed}")
+    # Check trumpPlayed
+    if trumpPlayed != snapshot['trumpPlayed']:
+        errors.append(f"trumpPlayed mismatch: expected {snapshot['trumpPlayed']}, got {trumpPlayed}")
     
-#     # Check trumpIndice
-#     if trumpIndice != snapshot['trumpIndice']:
-#         errors.append(f"trumpIndice mismatch: expected {snapshot['trumpIndice']}, got {trumpIndice}")
+    # Check trumpIndice
+    if trumpIndice != snapshot['trumpIndice']:
+        errors.append(f"trumpIndice mismatch: expected {snapshot['trumpIndice']}, got {trumpIndice}")
     
-#     # Check players' cards
-#     for i in range(4):
-#         cards_now = [card.identity() for card in players[i]['cards']]
-#         if cards_now != snapshot['players_cards'][i]:
-#             errors.append(f"Player {i} cards mismatch: expected {snapshot['players_cards'][i]}, got {cards_now}")
+    # Check players' cards
+    for i in range(4):
+        cards_now = [card.identity() for card in players[i]['cards']]
+        if cards_now != snapshot['players_cards'][i]:
+            errors.append(f"Player {i} cards mismatch: expected {snapshot['players_cards'][i]}, got {cards_now}")
     
-#     return errors
+    return errors
 
 
 def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution):
@@ -485,7 +489,7 @@ def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,cu
         
         for a in act:
             # VALIDATION: Capture state before applying action
-            # snapshot = capture_state_snapshot(s, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
+            snapshot = capture_state_snapshot(s, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
             
             # Apply action and get undo info
             currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,undo_info = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
@@ -498,15 +502,15 @@ def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,cu
             currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice = undo_result(s, undo_info, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
             
             # # VALIDATION: Check if state was restored correctly
-            # errors = validate_state_restoration(snapshot, s, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
-            # if errors:
-            #     print("\n" + "="*80)
-            #     print("UNDO VALIDATION FAILED!")
-            #     print("="*80)
-            #     for error in errors:
-            #         print(f"  ❌ {error}")
-            #     print("="*80)
-            #     raise AssertionError(f"Undo operation failed: {len(errors)} mismatches found")
+            errors = validate_state_restoration(snapshot, s, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
+            if errors:
+                print("\n" + "="*80)
+                print("UNDO VALIDATION FAILED!")
+                print("="*80)
+                for error in errors:
+                    print(f"  ❌ {error}")
+                print("="*80)
+                raise AssertionError(f"Undo operation failed: {len(errors)} mismatches found")
             
             if first:
                 reward_distribution.append(newtake)
@@ -524,7 +528,7 @@ def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,cu
         
         for a in act1:
             # VALIDATION: Capture state before applying action
-            # snapshot = capture_state_snapshot(s, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
+            snapshot = capture_state_snapshot(s, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
             
             # Apply action and get undo info
             currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,undo_info = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
@@ -537,15 +541,15 @@ def minimax(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,players,cu
             currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice = undo_result(s, undo_info, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
             
             # # VALIDATION: Check if state was restored correctly
-            # errors = validate_state_restoration(snapshot, s, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
-            # if errors:
-            #     print("\n" + "="*80)
-            #     print("UNDO VALIDATION FAILED!")
-            #     print("="*80)
-            #     for error in errors:
-            #         print(f"  ❌ {error}")
-            #     print("="*80)
-            #     raise AssertionError(f"Undo operation failed: {len(errors)} mismatches found")
+            errors = validate_state_restoration(snapshot, s, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
+            if errors:
+                print("\n" + "="*80)
+                print("UNDO VALIDATION FAILED!")
+                print("="*80)
+                for error in errors:
+                    print(f"  ❌ {error}")
+                print("="*80)
+                raise AssertionError(f"Undo operation failed: {len(errors)} mismatches found")
 
             if first:
                 reward_distribution.append(newtake)
@@ -661,32 +665,33 @@ def minimax_extended(s,first,secondary,trumpPlayed,currentCatch,trumpIndice,play
          num+=1
          currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
          playerChance = chk[0]
-        #  print(leaf_count[0])
-        #  leaf_count[0]+=1
          if num<k:
-            return minimax_extended(s,False,True,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,alpha=-math.inf,beta=math.inf)
+            return minimax_extended(s,False,True,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,alpha,beta)
          else:
+            # print(leaf_count[0])
+            # leaf_count[0]+=1
             return total
     
     if (playerChance+chance(s))%2!=0:
         value = -math.inf
-        act = copy.deepcopy(actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance))
+        act = actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance)
         chose = False
         for a in act:
-            s_copy = copy.deepcopy(s)
-            currentSuit_copy = copy.deepcopy(currentSuit)
-            trumpReveal_copy = copy.deepcopy(trumpReveal)
-            chose_copy = copy.deepcopy(chose) 
-            playerTrump_copy = copy.deepcopy(playerTrump)
-            trumpPlayed_copy = copy.deepcopy(trumpPlayed)
-            trumpIndice_copy = copy.deepcopy(trumpIndice)
-            players_copy = copy.deepcopy(players)
+            # s_copy = copy.deepcopy(s)
+            # currentSuit_copy = copy.deepcopy(currentSuit)
+            # trumpReveal_copy = copy.deepcopy(trumpReveal)
+            # chose_copy = copy.deepcopy(chose) 
+            # playerTrump_copy = copy.deepcopy(playerTrump)
+            # trumpPlayed_copy = copy.deepcopy(trumpPlayed)
+            # trumpIndice_copy = copy.deepcopy(trumpIndice)
+            # players_copy = copy.deepcopy(players)
             
             currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,undo_info = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-            newtake = minimax_extended(s,False,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,alpha)
+            newtake = minimax_extended(s,False,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,alpha,beta)
             value = max(value,newtake)
-            currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice = undo_result(s, undo_info, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
             alpha = max(alpha,value)
+            currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice = undo_result(s, undo_info, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
+            
             
             # s = s_copy
             # currentSuit = currentSuit_copy
@@ -708,7 +713,7 @@ def minimax_extended(s,first,secondary,trumpPlayed,currentCatch,trumpIndice,play
                 break
     else:
         value = math.inf
-        act1 =  copy.deepcopy(actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance)) 
+        act1 =  actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance)
         chose = False
         for a in act1:
             # s_copy1 = copy.deepcopy(s)
@@ -722,9 +727,12 @@ def minimax_extended(s,first,secondary,trumpPlayed,currentCatch,trumpIndice,play
             
             currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,undo_info = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
             newtake = minimax_extended(s,False,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,alpha,beta)
+           
             value = min(value,newtake)
-            currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice = undo_result(s, undo_info, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
             beta = min(beta,value)
+            
+            currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice = undo_result(s, undo_info, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
+            
 
 
             # s = s_copy1
@@ -746,6 +754,156 @@ def minimax_extended(s,first,secondary,trumpPlayed,currentCatch,trumpIndice,play
 
             if alpha>=beta:
                 break
+    return value
+
+
+def minimax_extended_suboptimal(s, first, secondary, trumpPlayed, currentCatch, trumpIndice, 
+                                 playerChance, players, currentSuit, trumpReveal, trumpSuit, 
+                                 chose, finalBid, playerTrump, reveal, reward_distribution, 
+                                 total, num, k, alpha=-math.inf, beta=math.inf):
+    """
+    Suboptimal version using deepcopy and resetting alpha-beta bounds.
+    Issues:
+    - Uses deepcopy on every node (expensive)
+    - Resets alpha-beta bounds to -inf/inf on recursive calls (breaks pruning)
+    - Deepcopies the actions list unnecessarily
+    """
+    if secondary:
+        s = copy.deepcopy(s)
+        trumpIndice = copy.deepcopy(trumpIndice)
+        players = copy.deepcopy(players)
+    
+    chk = checkwin_extended(s, trumpPlayed, currentCatch, trumpIndice, playerChance, players, currentSuit)
+
+    if chk[1] != -100:
+        total += chk[1]
+        num += 1
+        currentSuit, s, trumpPlayed, trumpIndice, chose = reset(currentSuit, s, trumpPlayed, trumpIndice, chose)
+        playerChance = chk[0]
+        
+        if num < k:
+            # Issue: Resets alpha-beta bounds (loses pruning!)
+            return minimax_extended_suboptimal(
+                s, False, True, trumpPlayed, currentCatch, trumpIndice, playerChance, 
+                players, currentSuit, trumpReveal, trumpSuit, chose, finalBid, 
+                playerTrump, reveal, reward_distribution, total, num, k, 
+                alpha, beta
+            )
+        else:
+            return total
+    
+    if (playerChance + chance(s)) % 2 != 0:
+        # Maximizing player
+        value = -math.inf
+        # Issue: Unnecessary deepcopy of actions list
+        act = copy.deepcopy(actions(s, players, trumpReveal, trumpSuit, currentSuit, 
+                                     chose, finalBid, playerTrump, trumpPlayed, 
+                                     trumpIndice, reveal, playerChance))
+        chose = False
+        
+        for a in act:
+            # Issue: Deepcopy entire state before recursion (expensive!)
+            s_copy = copy.deepcopy(s)
+            currentSuit_copy = copy.deepcopy(currentSuit)
+            trumpReveal_copy = copy.deepcopy(trumpReveal)
+            chose_copy = copy.deepcopy(chose)
+            playerTrump_copy = copy.deepcopy(playerTrump)
+            trumpPlayed_copy = copy.deepcopy(trumpPlayed)
+            trumpIndice_copy = copy.deepcopy(trumpIndice)
+            players_copy = copy.deepcopy(players)
+            
+            currentSuit, s, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players, trumpSuit, finalBid,_ = result(
+                s, a, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, 
+                trumpIndice, players, trumpSuit, finalBid, playerChance
+            )
+            
+            # Issue: Resets alpha-beta bounds (loses pruning!)
+            newtake = minimax_extended_suboptimal(
+                s, False, False, trumpPlayed, currentCatch, trumpIndice, playerChance, 
+                players, currentSuit, trumpReveal, trumpSuit, chose, finalBid, 
+                playerTrump, reveal, reward_distribution, total, num, k, 
+                alpha, beta
+            )
+            
+            value = max(value, newtake)
+            alpha = max(alpha, value)
+            
+            # Restore state from deepcopies
+            s = s_copy
+            currentSuit = currentSuit_copy
+            trumpReveal = trumpReveal_copy
+            chose = chose_copy
+            playerTrump = playerTrump_copy
+            trumpPlayed = trumpPlayed_copy
+            trumpIndice = trumpIndice_copy
+            players = players_copy
+            
+            if first and (len(reward_distribution) == 0 or newtake > reward_distribution[0][1]):
+                reward_distribution.clear()
+                if isinstance(a, bool):
+                    reward_distribution.append((a, newtake))
+                else:
+                    reward_distribution.append((a.identity(), newtake))
+
+            if alpha >= beta:
+                break
+                
+    else:
+        # Minimizing player
+        value = math.inf
+        # Issue: Unnecessary deepcopy of actions list
+        act1 = copy.deepcopy(actions(s, players, trumpReveal, trumpSuit, currentSuit, 
+                                      chose, finalBid, playerTrump, trumpPlayed, 
+                                      trumpIndice, reveal, playerChance))
+        chose = False
+        
+        for a in act1:
+            # Issue: Deepcopy entire state before recursion (expensive!)
+            s_copy1 = copy.deepcopy(s)
+            currentSuit_copy1 = copy.deepcopy(currentSuit)
+            trumpReveal_copy1 = copy.deepcopy(trumpReveal)
+            chose_copy1 = copy.deepcopy(chose)
+            playerTrump_copy1 = copy.deepcopy(playerTrump)
+            trumpPlayed_copy1 = copy.deepcopy(trumpPlayed)
+            trumpIndice_copy1 = copy.deepcopy(trumpIndice)
+            players_copy1 = copy.deepcopy(players)
+            
+            currentSuit, s, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players, trumpSuit, finalBid,_ = result(
+                s, a, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, 
+                trumpIndice, players, trumpSuit, finalBid, playerChance
+            )
+            
+            # Issue: Resets alpha-beta bounds (loses pruning!)
+            newtake = minimax_extended_suboptimal(
+                s, False, False, trumpPlayed, currentCatch, trumpIndice, playerChance, 
+                players, currentSuit, trumpReveal, trumpSuit, chose, finalBid, 
+                playerTrump, reveal, reward_distribution, total, num, k, 
+                alpha, beta
+            )
+            
+            value = min(value, newtake)
+            beta = min(beta, value)
+
+            # Restore state from deepcopies
+            s = s_copy1
+            currentSuit = currentSuit_copy1
+            trumpReveal = trumpReveal_copy1
+            chose = chose_copy1
+            playerTrump = playerTrump_copy1
+            trumpPlayed = trumpPlayed_copy1
+            trumpIndice = trumpIndice_copy1
+            players = players_copy1
+            
+            if first and (len(reward_distribution) == 0 or newtake < reward_distribution[0][1]):
+                reward_distribution.clear()
+                if isinstance(a, bool):
+                    reward_distribution.append((a, newtake))
+                else:
+                    reward_distribution.append((a.identity(), newtake))
+
+            if alpha >= beta:
+                break
+    
     return value
 
 def create_dictionary(p1,p2,p3,p4,finalBid,playerTrump):

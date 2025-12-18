@@ -32,6 +32,13 @@ class Cards:
 
         return pack
     
+    @classmethod
+    def remaining(cls, cards):
+        full_pack = cls.packOf28()
+        cards_identities = set(card.identity() for card in cards)
+        remaining_cards = [card for card in full_pack if card.identity() not in cards_identities]
+        return remaining_cards
+    
     # #Returns the same deck but the suit is only Hearts
     # @classmethod
     # def packOfSuit(cls):
