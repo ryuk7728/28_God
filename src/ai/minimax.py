@@ -702,8 +702,9 @@ def minimax_extended(s,first,secondary,trumpPlayed,currentCatch,trumpIndice,play
             # trumpIndice = trumpIndice_copy
             # players = players_copy
             
-            if first and (len(reward_distribution)==0 or newtake>reward_distribution[0][1]):
-                reward_distribution.clear()
+            if first and (len(reward_distribution)==0 or newtake>=reward_distribution[0][1]):
+                if len(reward_distribution)>0 and newtake>reward_distribution[0][1]:
+                    reward_distribution.clear()
                 if isinstance(a, bool):
                      reward_distribution.append((a,newtake))
                 else:
@@ -745,8 +746,9 @@ def minimax_extended(s,first,secondary,trumpPlayed,currentCatch,trumpIndice,play
             # players = players_copy1
 
             
-            if first and (len(reward_distribution)==0 or newtake<reward_distribution[0][1]):
-                reward_distribution.clear()
+            if first and (len(reward_distribution)==0 or newtake<=reward_distribution[0][1]):
+                if len(reward_distribution)>0 and newtake<reward_distribution[0][1]:
+                    reward_distribution.clear()
                 if isinstance(a, bool):
                      reward_distribution.append((a,newtake))
                 else:

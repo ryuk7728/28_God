@@ -21,6 +21,13 @@
             "request": "launch",
             "module": "tests.test_extended",
             "justMyCode": true
+        },
+        {
+            "name": "Debug test_minimax_game2",
+            "type": "python",
+            "request": "launch",
+            "module": "tests.test_minimax_game2",
+            "justMyCode": true
         }
     ]
 }
