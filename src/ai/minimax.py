@@ -710,7 +710,7 @@ def minimax_extended(s,first,secondary,trumpPlayed,currentCatch,trumpIndice,play
                 else:
                      reward_distribution.append((a.identity(),newtake))
 
-            if alpha>=beta:
+            if alpha>beta:
                 break
     else:
         value = math.inf
@@ -754,7 +754,7 @@ def minimax_extended(s,first,secondary,trumpPlayed,currentCatch,trumpIndice,play
                 else:
                      reward_distribution.append((a.identity(),newtake))
 
-            if alpha>=beta:
+            if alpha>beta:
                 break
     return value
 

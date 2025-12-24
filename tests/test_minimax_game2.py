@@ -37,6 +37,19 @@ def returnTrump(known,players,finalBid,trumpSuit):
             return card,card.suit
       else:
             return None,trumpSuit
+      
+def addTrump(crds,finalB,p3):
+      if finalB == 4:
+            finalB = 2
+      else:
+            if p3:
+                finalB-=1
+            else:
+                finalB-=2
+      for i in range(len(crds)):
+            if i>=finalB:
+                  crds[i]+=1
+      return crds[0],crds[1],crds[2]
 
 # def P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,total=0,num=0):
 #     cards = defaultdict(int)
@@ -77,6 +90,8 @@ def P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, load
     l2 = len(loaded_player2Cards)
     l3 = len(loaded_player3Cards)+l2
     l4 = len(loaded_player4Cards)+l3
+    if playerTrump is not None and finalBid != 1:
+        l2, l3, l4 = addTrump([l2, l3, l4], finalBid, False) 
     for i in range(500):
         random.shuffle(full_cards)
         loaded_player2Cards = full_cards[0:l2]
@@ -105,6 +120,8 @@ def P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, load
     l1 = len(loaded_player1Cards)
     l2 = len(loaded_player2Cards)+l1
     l4 = len(loaded_player4Cards)+l2
+    if playerTrump is not None and finalBid != 3:
+        l1, l2, l4 = addTrump([l1, l2, l4], finalBid, True)
     for i in range(500):
         random.shuffle(full_cards)
         loaded_player1Cards = full_cards[0:l1]
