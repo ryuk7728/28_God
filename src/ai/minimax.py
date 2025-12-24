@@ -652,111 +652,194 @@ def minimax_alpha(s,first,trumpPlayed,currentCatch,trumpIndice,playerChance,play
     return value
 
 # leaf_count = [1]
-def minimax_extended(s,first,secondary,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,alpha=-math.inf,beta=math.inf):
+def minimax_extended(s, first, secondary, trumpPlayed, currentCatch, trumpIndice, playerChance, 
+                     players, currentSuit, trumpReveal, trumpSuit, chose, finalBid, playerTrump, 
+                     reveal, reward_distribution, total, num, k, alpha=-math.inf, beta=math.inf, 
+                     current_sequence=None, trick_start_player=None, current_trick_cards=None):
+    """
+    Modified minimax that tracks all sequences leading to best total.
+    Returns: (value, sequences) where sequences is a list of all paths achieving best value.
+    """
+    if current_sequence is None:
+        current_sequence = []
+    if current_trick_cards is None:
+        current_trick_cards = []
+    
     if secondary:
         s = copy.deepcopy(s)
         trumpIndice = copy.deepcopy(trumpIndice)
         players = copy.deepcopy(players)
     
-    chk = checkwin_extended(s,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit)
+    chk = checkwin_extended(s, trumpPlayed, currentCatch, trumpIndice, playerChance, players, currentSuit)
 
-    if chk[1]!=-100:
-         total+=chk[1]
-         num+=1
-         currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
-         playerChance = chk[0]
-         if num<k:
-            return minimax_extended(s,False,True,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,alpha,beta)
-         else:
-            # print(leaf_count[0])
-            # leaf_count[0]+=1
-            return total
+    if chk[1] != -100:  # Trick completed
+        total += chk[1]
+        num += 1
+        
+        # Create trick record with cards we've been tracking
+        trick_record = {
+            'trick_num': num,
+            'cards': current_trick_cards,  # Use tracked cards instead of reconstructing
+            'winner': chk[0] + 1,  # Convert to 1-indexed
+            'points': chk[1]
+        }
+        
+        # Add trick to current sequence
+        new_sequence = current_sequence + [trick_record]
+        
+        currentSuit, s, trumpPlayed, trumpIndice, chose = reset(currentSuit, s, trumpPlayed, trumpIndice, chose)
+        playerChance = chk[0]
+        
+        if num < k:
+            # Continue to next trick - start fresh trick tracking
+            return minimax_extended(s, False, True, trumpPlayed, currentCatch, trumpIndice, 
+                                   playerChance, players, currentSuit, trumpReveal, trumpSuit, 
+                                   chose, finalBid, playerTrump, reveal, reward_distribution, 
+                                   total, num, k, alpha, beta, new_sequence, 
+                                   trick_start_player=None, current_trick_cards=[])
+        else:
+            # Reached k tricks - return total and the complete sequence
+            return total, [new_sequence]
     
-    if (playerChance+chance(s))%2!=0:
+    # Maximizing player
+    if (playerChance + chance(s)) % 2 != 0:
         value = -math.inf
-        act = actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance)
+        all_sequences = []
+        
+        # Track if this is the start of a trick
+        if trick_start_player is None:
+            trick_start_player = playerChance
+        
+        # Calculate current player based on playerChance and cards played
+        current_player = (playerChance + len(s)) % 4
+        
+        act = actions(s, players, trumpReveal, trumpSuit, currentSuit, chose, finalBid, 
+                     playerTrump, trumpPlayed, trumpIndice, reveal, playerChance)
         chose = False
+        
         for a in act:
-            # s_copy = copy.deepcopy(s)
-            # currentSuit_copy = copy.deepcopy(currentSuit)
-            # trumpReveal_copy = copy.deepcopy(trumpReveal)
-            # chose_copy = copy.deepcopy(chose) 
-            # playerTrump_copy = copy.deepcopy(playerTrump)
-            # trumpPlayed_copy = copy.deepcopy(trumpPlayed)
-            # trumpIndice_copy = copy.deepcopy(trumpIndice)
-            # players_copy = copy.deepcopy(players)
+            currentSuit_bak, s_bak = currentSuit, s[:]
+            trumpReveal_bak, chose_bak = trumpReveal, chose
+            playerTrump_bak = playerTrump
+            trumpPlayed_bak, trumpIndice_bak = trumpPlayed, trumpIndice[:]
+            players_bak = copy.deepcopy(players)
+            trumpSuit_bak, finalBid_bak = trumpSuit, finalBid
             
-            currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,undo_info = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-            newtake = minimax_extended(s,False,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,alpha,beta)
-            value = max(value,newtake)
-            alpha = max(alpha,value)
-            currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice = undo_result(s, undo_info, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
+            # Track this card play with CURRENT player (not playerChance)
+            card_play = {
+                'player': current_player + 1,  # 1-indexed
+                'card': a.identity() if not isinstance(a, bool) else str(a)
+            }
+            new_trick_cards = current_trick_cards + [card_play]
             
+            currentSuit, s, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players, trumpSuit, finalBid, undo_info = result(
+                s, a, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, 
+                players, trumpSuit, finalBid, playerChance
+            )
             
-            # s = s_copy
-            # currentSuit = currentSuit_copy
-            # trumpReveal = trumpReveal_copy
-            # chose = chose_copy
-            # playerTrump = playerTrump_copy
-            # trumpPlayed = trumpPlayed_copy
-            # trumpIndice = trumpIndice_copy
-            # players = players_copy
+            # Pass same playerChance - it stays constant within a trick
+            newtake, sequences = minimax_extended(s, False, False, trumpPlayed, currentCatch, 
+                                                  trumpIndice, playerChance, players, currentSuit, 
+                                                  trumpReveal, trumpSuit, chose, finalBid, 
+                                                  playerTrump, reveal, reward_distribution, 
+                                                  total, num, k, alpha, beta, current_sequence,
+                                                  trick_start_player, new_trick_cards)
             
-            if first and (len(reward_distribution)==0 or newtake>=reward_distribution[0][1]):
-                if len(reward_distribution)>0 and newtake>reward_distribution[0][1]:
+            # Track best sequences - only keep sequences that achieve the best value
+            if newtake > value:
+                value = newtake
+                all_sequences = sequences  # Replace with better sequences
+            elif newtake == value:
+                all_sequences.extend(sequences)  # Add equally good sequences
+            
+            alpha = max(alpha, value)
+            
+            currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice = undo_result(
+                s, undo_info, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players
+            )
+            
+            if first and (len(reward_distribution) == 0 or newtake >= reward_distribution[0][1]):
+                if len(reward_distribution) > 0 and newtake > reward_distribution[0][1]:
                     reward_distribution.clear()
                 if isinstance(a, bool):
-                     reward_distribution.append((a,newtake))
+                    reward_distribution.append((a, newtake))
                 else:
-                     reward_distribution.append((a.identity(),newtake))
-
-            if alpha>=beta:
+                    reward_distribution.append((a.identity(), newtake))
+            
+            if alpha >= beta:
                 break
+        
+        return value, all_sequences
+    
+    # Minimizing player
     else:
         value = math.inf
-        act1 =  actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTrump,trumpPlayed,trumpIndice,reveal,playerChance)
+        all_sequences = []
+        
+        # Track if this is the start of a trick
+        if trick_start_player is None:
+            trick_start_player = playerChance
+        
+        # Calculate current player based on playerChance and cards played
+        current_player = (playerChance + len(s)) % 4
+        
+        act1 = actions(s, players, trumpReveal, trumpSuit, currentSuit, chose, finalBid, 
+                      playerTrump, trumpPlayed, trumpIndice, reveal, playerChance)
         chose = False
+        
         for a in act1:
-            # s_copy1 = copy.deepcopy(s)
-            # currentSuit_copy1 = copy.deepcopy(currentSuit)
-            # trumpReveal_copy1 = copy.deepcopy(trumpReveal)
-            # chose_copy1 = copy.deepcopy(chose)
-            # playerTrump_copy1 = copy.deepcopy(playerTrump)
-            # trumpPlayed_copy1 = copy.deepcopy(trumpPlayed)
-            # trumpIndice_copy1 = copy.deepcopy(trumpIndice)
-            # players_copy1 = copy.deepcopy(players)
+            currentSuit_bak, s_bak = currentSuit, s[:]
+            trumpReveal_bak, chose_bak = trumpReveal, chose
+            playerTrump_bak = playerTrump
+            trumpPlayed_bak, trumpIndice_bak = trumpPlayed, trumpIndice[:]
+            players_bak = copy.deepcopy(players)
+            trumpSuit_bak, finalBid_bak = trumpSuit, finalBid
             
-            currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,undo_info = result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-            newtake = minimax_extended(s,False,False,trumpPlayed,currentCatch,trumpIndice,playerChance,players,currentSuit,trumpReveal,trumpSuit,chose,finalBid,playerTrump,reveal,reward_distribution,total,num,k,alpha,beta)
-           
-            value = min(value,newtake)
-            beta = min(beta,value)
+            # Track this card play with CURRENT player (not playerChance)
+            card_play = {
+                'player': current_player + 1,  # 1-indexed
+                'card': a.identity() if not isinstance(a, bool) else str(a)
+            }
+            new_trick_cards = current_trick_cards + [card_play]
             
-            currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice = undo_result(s, undo_info, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players)
+            currentSuit, s, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players, trumpSuit, finalBid, undo_info = result(
+                s, a, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, 
+                players, trumpSuit, finalBid, playerChance
+            )
             
-
-
-            # s = s_copy1
-            # currentSuit = currentSuit_copy1
-            # trumpReveal = trumpReveal_copy1
-            # chose = chose_copy1
-            # playerTrump = playerTrump_copy1
-            # trumpPlayed = trumpPlayed_copy1
-            # trumpIndice = trumpIndice_copy1
-            # players = players_copy1
-
+            # Pass same playerChance - it stays constant within a trick
+            newtake, sequences = minimax_extended(s, False, False, trumpPlayed, currentCatch, 
+                                                  trumpIndice, playerChance, players, currentSuit, 
+                                                  trumpReveal, trumpSuit, chose, finalBid, 
+                                                  playerTrump, reveal, reward_distribution, 
+                                                  total, num, k, alpha, beta, current_sequence,
+                                                  trick_start_player, new_trick_cards)
             
-            if first and (len(reward_distribution)==0 or newtake<=reward_distribution[0][1]):
-                if len(reward_distribution)>0 and newtake<reward_distribution[0][1]:
+            # Track best sequences - only keep sequences that achieve the best value
+            if newtake < value:
+                value = newtake
+                all_sequences = sequences  # Replace with better sequences
+            elif newtake == value:
+                all_sequences.extend(sequences)  # Add equally good sequences
+            
+            beta = min(beta, value)
+            
+            currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice = undo_result(
+                s, undo_info, currentSuit, trumpReveal, chose, playerTrump, trumpPlayed, trumpIndice, players
+            )
+            
+            if first and (len(reward_distribution) == 0 or newtake <= reward_distribution[0][1]):
+                if len(reward_distribution) > 0 and newtake < reward_distribution[0][1]:
                     reward_distribution.clear()
                 if isinstance(a, bool):
-                     reward_distribution.append((a,newtake))
+                    reward_distribution.append((a, newtake))
                 else:
-                     reward_distribution.append((a.identity(),newtake))
-
-            if alpha>=beta:
+                    reward_distribution.append((a.identity(), newtake))
+            
+            if alpha >= beta:
                 break
-    return value
+        
+        return value, all_sequences
 
 
 def minimax_extended_suboptimal(s, first, secondary, trumpPlayed, currentCatch, trumpIndice, 

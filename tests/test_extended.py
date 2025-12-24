@@ -144,120 +144,120 @@ players = create_dictionary(loaded_player1Cards,loaded_player2Cards,loaded_playe
 
 currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(6),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
 currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(5),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(7),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
-playerChance = 2
-
-# P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-known = True
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,True,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-loaded_player1Cards =  players[0]['cards']
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(4),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(5),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
-playerChance = 0
-
-# P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(4),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(5),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(3),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
-playerChance = 0
-
-k=2
-# P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(3),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(1),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
-playerChance = 1
-
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(3),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-k=3
-# P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(1),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
-playerChance = 0
-
-# P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(1),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
 P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
-playerChance = 3
-k=2
-currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(1),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
-#WHYYYYYYY ABOVE IT DIDNT PLAY ACE OF CLUBS CHECKKKKKKK
-# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(1),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(1),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(7),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
+# playerChance = 2
+
 # # P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
 # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# known = True
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,True,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# loaded_player1Cards =  players[0]['cards']
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(4),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(5),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
 # currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
 # playerChance = 0
 
-# P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
+# # P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
 # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(4),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(5),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(3),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
+# playerChance = 0
+
+# k=2
+# # P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(3),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(1),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
+# playerChance = 1
+
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(3),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# k=3
+# # P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(1),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
+# playerChance = 0
+
+# # P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(1),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
 # P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
 # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
 # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# print()
-
-
-# known = True #Trump was revealed now
-# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,True,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# loaded_player1Cards =  players[0]['cards']
-# P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
-
-# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(7),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(2),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
 # currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
-# playerChance = 2
-
-# P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
-# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(6),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# playerChance = 3
+# k=2
+# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(1),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
 # P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
-# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(5),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(5),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
-# playerChance = 2
+# #WHYYYYYYY ABOVE IT DIDNT PLAY ACE OF CLUBS CHECKKKKKKK
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(1),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(1),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # # P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
+# # playerChance = 0
 
-# P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
-# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(5),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
-# k=3
-# P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
+# # P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # print()
 
 
-# # print(time.time())
-# # cards = defaultdict(int)
+# # known = True #Trump was revealed now
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,True,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # loaded_player1Cards =  players[0]['cards']
+# # P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
 
-# # for i in range(500):
-# #         test_minimax_game1(cards)
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(7),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(2),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
+# # playerChance = 2
 
-# # print(time.time())
+# # P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(6),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player1Cards.pop(5),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player2Cards.pop(5),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # currentSuit,s,trumpPlayed,trumpIndice,chose = reset(currentSuit,s,trumpPlayed,trumpIndice,chose)
+# # playerChance = 2
 
-# # best = ""
-# # freq = -1
-# # for k,v in cards.items():
-# #        if v>freq:
-# #               freq = v
-# #               best = k
-# # print(best,freq/500)
+# # P3(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpSuit,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k,known,total=0,num=0)
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player3Cards.pop(0),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # currentSuit,s,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid, _ = result(s,loaded_player4Cards.pop(5),currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice,players,trumpSuit,finalBid,playerChance)
+# # k=3
+# # P1(cards,loaded_player1Cards, loaded_player2Cards, loaded_player3Cards, loaded_player4Cards,finalBid,trumpReveal,currentSuit,chose,trumpPlayed,trumpIndice,reveal,currentCatch,playerChance,s,playerTrump,k)
+
+
+# # # print(time.time())
+# # # cards = defaultdict(int)
+
+# # # for i in range(500):
+# # #         test_minimax_game1(cards)
+
+# # # print(time.time())
+
+# # # best = ""
+# # # freq = -1
+# # # for k,v in cards.items():
+# # #        if v>freq:
+# # #               freq = v
+# # #               best = k
+# # # print(best,freq/500)
        
