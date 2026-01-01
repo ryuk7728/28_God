@@ -188,13 +188,15 @@ def actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTru
     # Gets the updated player chance by using mod for reset
     playerChance=(playerChance+len(s))%4
     if players[playerChance]['isTrump'] and not trumpReveal and len(players[playerChance]['cards'])==0 and not chose:
+          print("EDGE CASEEEEEE")
           return [True]
     #First player in in the catchs' chance
     if  (chance(s)-1)==0:
         # Trump Call Player
         if players[playerChance]['isTrump']:
-                        if len(players[playerChance]['cards'])==0 and trumpReveal and playerTrump is not None:
-                              players[playerChance]['cards'].append(playerTrump)
+                        # if len(players[playerChance]['cards'])==0 and trumpReveal and playerTrump is not None:
+                            #   players[playerChance]['cards'].append(playerTrump)
+                            #   printCards(players[playerChance]['cards'])
                         #If trump is already revealed or the player has all trumps, all cards are valid
                         if trumpReveal or allTrump(players[playerChance]['cards'],trumpSuit):
                             return (players[playerChance]['cards'])
@@ -244,7 +246,7 @@ def actions(s,players,trumpReveal,trumpSuit,currentSuit,chose,finalBid,playerTru
                                         # playerTrump = None
                                         # trumpPlayed = True
                                         # trumpIndice[len(s)] = 1
-                                        players[finalBid-1]['cards'].append(playerTrump)
+                                        # players[finalBid-1]['cards'].append(playerTrump)
                                         return [playerTrump]
                                         #  self.currentCatch.append(self.playerTrump)
 
@@ -347,11 +349,12 @@ def result(s,a,currentSuit,trumpReveal,chose,playerTrump,trumpPlayed,trumpIndice
     else: 
         undo_info['action_type'] = 'reveal_choice'
         
-        if (a and ((playerChance+len(s)+1)%4)!=finalBid): 
+        if (a and ((playerChance+len(s))%4)!=finalBid-1): 
             players[finalBid-1]['cards'].append(playerTrump)
             undo_info['trump_added_to_player'] = finalBid-1
             playerTrump = None
         elif a:
+             players[finalBid-1]['cards'].append(playerTrump)
              undo_info['trump_added_to_player'] = finalBid-1
             
         chose = True

@@ -29,5 +29,20 @@
             "module": "tests.test_minimax_game2",
             "justMyCode": true
         }
+        ,
+        {
+            "name": "Debug test_game5",
+            "type": "python",
+            "request": "launch",
+            "module": "tests.test_game5",
+            "justMyCode": true
+        },
+                {
+            "name": "Debug test_game6",
+            "type": "python",
+            "request": "launch",
+            "module": "tests.test_game6",
+            "justMyCode": true
+        }
     ]
 }

@@ -325,3 +325,71 @@ def get_game5():
         return [Cards(suit, rank, *pts_and_order(rank)) for suit, rank in spec]
 
     return [make_cards(P1), make_cards(P2), make_cards(P3), make_cards(P4)]
+
+def get_game6():
+
+    ranks = ["Seven", "Eight", "Queen", "King", "Ten", "Ace", "Nine", "Jack"]
+
+    def pts_and_order(rank):
+        points = 0
+        if rank in ("Ten", "Ace"):
+            points = 1
+        elif rank == "Nine":
+            points = 2
+        elif rank == "Jack":
+            points = 3
+        order = ranks.index(rank)
+        return points, order
+
+    # Player 1 (Team 1) — Bidder
+    P1 = [
+        ("Clubs", "Jack"),
+        ("Hearts", "King"),
+        ("Hearts", "Queen"),
+        ("Clubs", "Eight"),
+        ("Clubs", "Ace"),
+        ("Hearts", "Seven"),
+        ("Hearts", "Eight"),
+        ("Clubs", "Nine"),
+    ]
+
+    # Player 2 (Team 2)
+    P2 = [
+        ("Hearts", "Jack"),
+        ("Clubs", "Seven"),
+        ("Hearts", "Ace"),
+        ("Hearts", "Ten"),
+        ("Spades", "Queen"),
+        ("Spades", "Eight"),
+        ("Spades", "Seven"),
+        ("Spades", "Ace"),
+    ]
+
+    # Player 3 (Team 1)
+    P3 = [
+        ("Diamonds", "Jack"),
+        ("Clubs", "Ten"),
+        ("Clubs", "King"),
+        ("Clubs", "Queen"),
+        ("Spades", "Ten"),
+        ("Diamonds", "Nine"),
+        ("Diamonds", "Ten"),
+        ("Hearts", "Nine"),
+    ]
+
+    # Player 4 (Team 2)
+    P4 = [
+        ("Spades", "Jack"),
+        ("Spades", "Nine"),
+        ("Diamonds", "King"),
+        ("Diamonds", "Queen"),
+        ("Spades", "King"),
+        ("Diamonds", "Ace"),
+        ("Diamonds", "Eight"),
+        ("Diamonds", "Seven"),
+    ]
+
+    def make_cards(spec):
+        return [Cards(suit, rank, *pts_and_order(rank)) for suit, rank in spec]
+
+    return [make_cards(P1), make_cards(P2), make_cards(P3), make_cards(P4)]
